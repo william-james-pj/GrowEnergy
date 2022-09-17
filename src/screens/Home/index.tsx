@@ -1,22 +1,13 @@
 import React from "react";
 
-import { ButtonLarge } from "../../components/ButtonLarge";
-
-import { useAuth } from "../../hooks/useAuth";
+import { Header } from "../../components/Header";
 
 import * as S from "./styles";
 
 export function Home() {
-  const { logout } = useAuth();
-
   return (
     <S.Wrapper>
-      <ButtonLarge
-        onPress={() => {
-          logout();
-        }}
-        text={"Iniciar"}
-      />
+      <Header title="Home" />
     </S.Wrapper>
   );
 }

@@ -4,7 +4,7 @@ import { View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 
 import { Logout } from "./logout";
-import { Home } from "../screens/Home";
+import { DrawerNavigator } from "./logged/DrawerNavigator";
 
 import { useAuth } from "../hooks/useAuth";
 
@@ -14,7 +14,7 @@ export function Routes() {
   return (
     <View style={{ flex: 1 }}>
       <NavigationContainer>
-        {!user?.id ? <Logout /> : <Home />}
+        {!user?.id ? <Logout /> : <DrawerNavigator />}
       </NavigationContainer>
     </View>
   );
