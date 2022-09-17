@@ -52,3 +52,12 @@ export const Form = styled.View`
 
   margin: 24px 0 32px 0;
 `;
+
+export const ErrorText = styled.Text`
+  width: 95%;
+  text-align: center;
+  margin-bottom: 32px;
+  color: ${(props) => props.theme.colors.red};
+  font-family: ${fonts.type.text400};
+  font-size: ${fonts.size.sm};
+`;

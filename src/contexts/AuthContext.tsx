@@ -64,7 +64,21 @@ export function AuthContextProvider(props: AuthContextProviderProps) {
       setUser({
         id: uid || "",
       });
-    } catch (error) {}
+      setErrorMsg("");
+    } catch (error: any) {
+      if (
+        error.code === "auth/wrong-password" ||
+        error.code === "auth/user-not-found"
+      ) {
+        setErrorMsg("Usuário ou senha incorreto");
+        return;
+      }
+      if (error.code == "auth/user-disabled") {
+        setErrorMsg("Usuário desativado");
+        return;
+      }
+      setErrorMsg(error.message);
+    }
   }
 
   function logout() {

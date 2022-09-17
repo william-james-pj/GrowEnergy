@@ -6,13 +6,37 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { ButtonLarge } from "../../components/ButtonLarge";
 import { TextInput } from "../../components/TextInput";
 
+import { useAuth } from "../../hooks/useAuth";
+import { Loading } from "../../components/Loading";
 import { emailValidator } from "../../utils/emailValidator";
 
 import * as S from "./styles";
 
 export function Login() {
+  const { login, errorMsg } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [validatedStatus, setValidatedStatus] = useState(true);
+
+  const handleLogin = async () => {
+    try {
+      if (!email.trim().length || !password.trim().length) return;
+
+      if (!validatedStatus) return;
+
+      setLoading(true);
+      await login(email, password);
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
+    }
+  };
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <S.WrapperBackgroud>
@@ -34,6 +58,7 @@ export function Login() {
                     onChangeText={setEmail}
                     value={email}
                     validator={emailValidator}
+                    setValidatedStatus={setValidatedStatus}
                     errorText={"Por favor insira um endereço de e-mail válido"}
                     keyboardType={"email-address"}
                   />
@@ -45,7 +70,10 @@ export function Login() {
                   />
                   <S.TextFogot>Esqueceu a senha?</S.TextFogot>
                 </S.Form>
-                <ButtonLarge onPress={() => {}} text={"Entrar"} />
+                {!errorMsg.trim().length ? null : (
+                  <S.ErrorText>{errorMsg}</S.ErrorText>
+                )}
+                <ButtonLarge onPress={handleLogin} text={"Entrar"} />
               </S.Header>
             </S.Wrapper>
           </ScrollView>

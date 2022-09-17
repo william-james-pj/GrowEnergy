@@ -8,6 +8,7 @@ type TextInputProps = {
   value: string;
   secureTextEntry?: boolean;
   validator?: (input: string) => boolean;
+  setValidatedStatus?: (status: boolean) => void;
   errorText?: string;
   widhtBox?: string;
   keyboardType?: "default" | "email-address";
@@ -24,6 +25,7 @@ export function TextInput({
   value,
   secureTextEntry = false,
   validator,
+  setValidatedStatus,
   errorText = "",
   widhtBox = "100%",
   keyboardType = "default",
@@ -32,13 +34,16 @@ export function TextInput({
 
   const changeText = (text: string) => {
     onChangeText(text);
-    if (validState !== Pristine) validate();
+    validate(text);
   };
 
-  const validate = () => {
+  const validate = (text: string) => {
     if (validator) {
-      const valid = validator(value);
+      const valid = validator(text);
       setValidState(valid);
+      if (setValidatedStatus) {
+        setValidatedStatus(valid);
+      }
     }
   };
 
@@ -51,7 +56,6 @@ export function TextInput({
           value={value}
           onChangeText={changeText}
           secureTextEntry={secureTextEntry}
-          onBlur={validate}
           keyboardType={keyboardType}
           autoCapitalize={
             keyboardType === "email-address" ? "none" : "sentences"
