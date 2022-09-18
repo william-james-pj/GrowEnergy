@@ -4,6 +4,8 @@ export const light = {
     primary: "rgba(253, 192, 113, 1)",
     secundary: "rgba(129, 123, 233, 1)",
 
+    primaryOpacity: "rgba(253, 192, 113, 0.4)",
+
     background: "rgba(245, 246, 248, 1)",
     card: "rgba(255, 255, 255, 1)",
 
