@@ -1,5 +1,5 @@
 import React from "react";
-
+import { StatusBar } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { DrawerScreenProps } from "../../@types/types";
 import { RectButton } from "react-native-gesture-handler";
@@ -21,7 +21,7 @@ export function Header({ title = "GrowTech", back = false }: HeaderProps) {
   function clickGoBack() {}
 
   return (
-    <S.ViewContainer>
+    <S.ViewContainer style={{ marginTop: StatusBar.currentHeight }}>
       <S.ButtonContainer>
         <RectButton
           onPress={back ? clickGoBack : openMenu}

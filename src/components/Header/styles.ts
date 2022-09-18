@@ -6,8 +6,7 @@ import GoBackSvg from "../../assets/svg/GoBack.svg";
 
 export const ViewContainer = styled.View`
   width: 100%;
-  height: 100px;
-  background: ${(props) => props.theme.colors.background};
+  height: 35px;
   flex-direction: row;
   justify-content: center;
   align-items: center;
