@@ -17,6 +17,7 @@ type HomeNavigationProp = NativeStackNavigationProp<HomeParamList>;
 
 type CondominiumsParamList = {
   Condominiums: undefined;
+  SeeCondominium: undefined;
 };
 
 type CondominiumsNavigationProp =
@@ -29,5 +30,9 @@ type UserType = {
 };
 
 type CondominiumsType = {
+  id: string;
+};
+
+type DevicesType = {
   id: string;
 };

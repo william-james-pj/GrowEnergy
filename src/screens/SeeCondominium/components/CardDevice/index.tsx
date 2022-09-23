@@ -10,15 +10,15 @@ import BoltSVG from "../../../../assets/svg/BoltCondominium.svg";
 
 import * as S from "./styles";
 
-export function CardCondominiums() {
+export function CardDevice() {
   const { theme } = useDarkMode();
   const navigation = useNavigation<CondominiumsNavigationProp>();
 
   return (
     <S.ViewWrapper>
       <S.ViewHeader>
-        <S.TextCondominiumName>Condomínio 1</S.TextCondominiumName>
-        <S.TextDistrict>Sorocaba - Bairro x</S.TextDistrict>
+        <S.TextCondominiumName>Dispositivo 1</S.TextCondominiumName>
+        <S.TextDistrict>Hoje</S.TextDistrict>
       </S.ViewHeader>
       <S.ViewContent>
         <S.ViewGeneration>
@@ -27,16 +27,11 @@ export function CardCondominiums() {
           </S.ViewCicle>
           <S.ViewGenerationText>
             <S.TextGeneration>Geração total</S.TextGeneration>
-            <S.TextGenerationValue>30 kW</S.TextGenerationValue>
+            <S.TextGenerationValue>10 kW</S.TextGenerationValue>
           </S.ViewGenerationText>
         </S.ViewGeneration>
 
-        <ButtonSmall
-          text="Detalhe"
-          onPress={() => {
-            navigation.navigate("SeeCondominium");
-          }}
-        />
+        <ButtonSmall text="Detalhe" onPress={() => {}} />
       </S.ViewContent>
     </S.ViewWrapper>
   );

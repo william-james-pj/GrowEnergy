@@ -4,6 +4,7 @@ import {
 } from "@react-navigation/stack";
 
 import { Condominiums } from "../../screens/Condominiums";
+import { SeeCondominium } from "../../screens/SeeCondominium";
 
 import { CondominiumsParamList } from "../../@types/types";
 
@@ -27,6 +28,11 @@ export function CondominiumsStackNavigator() {
         options={{ headerShown: false }}
         name="Condominiums"
         component={Condominiums}
+      />
+      <Stack.Screen
+        options={{ headerShown: false }}
+        name="SeeCondominium"
+        component={SeeCondominium}
       />
     </Stack.Navigator>
   );
