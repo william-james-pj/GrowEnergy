@@ -10,6 +10,7 @@ type LogoutNavigationProp = NativeStackNavigationProp<LogoutStackParamList>;
 
 type HomeParamList = {
   Home: undefined;
+  EnergySaving: undefined;
 };
 
 type HomeNavigationProp = NativeStackNavigationProp<HomeParamList>;

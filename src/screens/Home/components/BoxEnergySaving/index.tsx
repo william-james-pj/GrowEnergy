@@ -1,5 +1,7 @@
 import React from "react";
 
+import { StyleSheet } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import { RectButton } from "react-native-gesture-handler";
 
 import SolarPanelSvg from "../../../../assets/svg/SolarPanel.svg";
@@ -7,24 +9,33 @@ import ArrowRightSvg from "../../../../assets/svg/ArrowRightEnergySaving.svg";
 
 import { useDarkMode } from "../../../../hooks/userDarkMode";
 
+import { HomeNavigationProp } from "../../../../@types/types";
+
 import * as S from "./styles";
 
 export function BoxEnergySaving() {
   const { theme } = useDarkMode();
+  const navigation = useNavigation<HomeNavigationProp>();
+
+  const styles = StyleSheet.create({
+    button: {
+      position: "absolute",
+      top: 0,
+      bottom: 0,
+      left: 0,
+      right: 0,
+      borderRadius: 8,
+      zIndex: 99,
+    },
+  });
 
   return (
     <S.ViewWrapper>
       <RectButton
-        style={{
-          position: "absolute",
-          top: 0,
-          bottom: 0,
-          left: 0,
-          right: 0,
-          borderRadius: 8,
-          zIndex: 99,
+        style={styles.button}
+        onPress={() => {
+          navigation.navigate("EnergySaving");
         }}
-        onPress={() => {}}
       ></RectButton>
       <S.ViewHeader>
         <S.ViewText>

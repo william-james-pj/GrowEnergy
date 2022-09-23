@@ -4,6 +4,7 @@ import {
 } from "@react-navigation/stack";
 
 import { Home } from "../../screens/Home";
+import { EnergySaving } from "../../screens/EnergySaving";
 
 import { HomeParamList } from "../../@types/types";
 
@@ -27,6 +28,12 @@ export function HomeStackNavigator() {
         options={{ headerShown: false }}
         name="Home"
         component={Home}
+      />
+
+      <Stack.Screen
+        options={{ headerShown: false }}
+        name="EnergySaving"
+        component={EnergySaving}
       />
     </Stack.Navigator>
   );

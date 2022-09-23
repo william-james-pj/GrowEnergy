@@ -13,19 +13,22 @@ interface HeaderProps {
 
 export function Header({ title = "GrowTech", back = false }: HeaderProps) {
   const usenavigation = useNavigation<DrawerScreenProps>();
+  const navigation = useNavigation();
 
   function openMenu() {
     usenavigation.openDrawer();
   }
 
-  function clickGoBack() {}
+  function clickGoBack() {
+    navigation.goBack();
+  }
 
   return (
     <S.ViewContainer style={{ marginTop: StatusBar.currentHeight }}>
       <S.ButtonContainer>
         <RectButton
           onPress={back ? clickGoBack : openMenu}
-          style={{ padding: 5, zIndex: 5 }}
+          style={{ padding: 5, zIndex: 5, borderRadius: 8 }}
         >
           {back ? <S.GoBack /> : <S.BarMenu />}
         </RectButton>
