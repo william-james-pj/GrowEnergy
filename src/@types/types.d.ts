@@ -27,3 +27,7 @@ type DrawerScreenProps = DrawerScreenProps;
 type UserType = {
   id: string;
 };
+
+type CondominiumsType = {
+  id: string;
+};
