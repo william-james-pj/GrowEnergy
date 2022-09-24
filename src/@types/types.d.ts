@@ -18,6 +18,7 @@ type HomeNavigationProp = NativeStackNavigationProp<HomeParamList>;
 type CondominiumsParamList = {
   Condominiums: undefined;
   SeeCondominium: undefined;
+  SeeDevice: undefined;
 };
 
 type CondominiumsNavigationProp =

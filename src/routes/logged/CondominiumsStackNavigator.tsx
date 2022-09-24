@@ -5,6 +5,7 @@ import {
 
 import { Condominiums } from "../../screens/Condominiums";
 import { SeeCondominium } from "../../screens/SeeCondominium";
+import { SeeDevice } from "../../screens/SeeDevice";
 
 import { CondominiumsParamList } from "../../@types/types";
 
@@ -33,6 +34,11 @@ export function CondominiumsStackNavigator() {
         options={{ headerShown: false }}
         name="SeeCondominium"
         component={SeeCondominium}
+      />
+      <Stack.Screen
+        options={{ headerShown: false }}
+        name="SeeDevice"
+        component={SeeDevice}
       />
     </Stack.Navigator>
   );

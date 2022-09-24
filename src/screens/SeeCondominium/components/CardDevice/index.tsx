@@ -31,7 +31,12 @@ export function CardDevice() {
           </S.ViewGenerationText>
         </S.ViewGeneration>
 
-        <ButtonSmall text="Detalhe" onPress={() => {}} />
+        <ButtonSmall
+          text="Detalhe"
+          onPress={() => {
+            navigation.navigate("SeeDevice");
+          }}
+        />
       </S.ViewContent>
     </S.ViewWrapper>
   );
