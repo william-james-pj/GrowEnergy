@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { DateSelector } from "../../components/DateSelector";
 
 import { Header } from "../../components/Header";
 import { BoxValueSaving } from "./components/BoxValueSaving";
@@ -6,6 +7,13 @@ import { BoxValueSaving } from "./components/BoxValueSaving";
 import * as S from "./styles";
 
 export function EnergySaving() {
+  const [dateSelected, setDateSelected] = useState(new Date());
+
+  const changeDate = (date: Date) => {
+    setDateSelected(date);
+    console.log(date);
+  };
+
   return (
     <S.ViewWrapper>
       <Header title="Economia de energia" back={true} />
@@ -21,7 +29,9 @@ export function EnergySaving() {
         />
       </S.ViewRow>
       <S.TextSection>Overview</S.TextSection>
-      <S.ViewRow></S.ViewRow>
+      <S.ViewRow>
+        <DateSelector onChange={changeDate} />
+      </S.ViewRow>
       <S.ViewRow style={{ marginTop: 16 }}>
         <BoxValueSaving
           title={`Economia de\nenergia`}
