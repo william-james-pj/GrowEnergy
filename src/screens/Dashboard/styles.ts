@@ -19,3 +19,8 @@ export const TextSectionTitle = styled.Text`
 export const ViewRow = styled.View`
   flex-direction: row;
 `;
+
+export const ViewDivision = styled.View`
+  flex-direction: row;
+  width: 16px;
+`;

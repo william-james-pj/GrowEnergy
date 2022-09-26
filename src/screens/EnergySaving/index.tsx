@@ -2,16 +2,37 @@ import React, { useState } from "react";
 import { DateSelector } from "../../components/DateSelector";
 
 import { Header } from "../../components/Header";
+import {
+  DropdownDataType,
+  LocationDropdown,
+} from "../../components/LocationDropdown";
 import { BoxValueSaving } from "./components/BoxValueSaving";
 
 import * as S from "./styles";
 
+const initalDropdownValue: DropdownDataType = {
+  id: "1",
+  label: "Todos os condomínios",
+  value: "all",
+};
+
+const dropdownData: DropdownDataType[] = [
+  initalDropdownValue,
+  { id: "2", label: "Condomínio 1", value: "" },
+];
+
 export function EnergySaving() {
   const [dateSelected, setDateSelected] = useState(new Date());
+  const [locationSelected, setLocationSelected] =
+    useState<DropdownDataType>(initalDropdownValue);
 
   const changeDate = (date: Date) => {
     setDateSelected(date);
     console.log(date);
+  };
+
+  const changeLocation = (value: DropdownDataType) => {
+    setLocationSelected(value);
   };
 
   return (
@@ -29,9 +50,15 @@ export function EnergySaving() {
         />
       </S.ViewRow>
       <S.TextSection>Overview</S.TextSection>
-      <S.ViewRow>
+      <S.ViewOptions>
+        <LocationDropdown
+          currentValue={locationSelected}
+          data={dropdownData}
+          onChange={changeLocation}
+        />
+        <S.ViewDivision />
         <DateSelector onChange={changeDate} />
-      </S.ViewRow>
+      </S.ViewOptions>
       <S.ViewRow style={{ marginTop: 16 }}>
         <BoxValueSaving
           title={`Economia de\nenergia`}

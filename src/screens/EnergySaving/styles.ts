@@ -13,10 +13,19 @@ export const ViewRow = styled.View`
   justify-content: space-between;
 `;
 
+export const ViewOptions = styled.View`
+  flex-direction: row;
+`;
+
 export const TextSection = styled.Text`
   color: ${(props) => props.theme.colors.text};
   font-size: ${fonts.size.sm};
   font-family: ${fonts.type.text700};
   margin-top: 32px;
   margin-bottom: 16px;
+`;
+
+export const ViewDivision = styled.View`
+  flex-direction: row;
+  width: 16px;
 `;
