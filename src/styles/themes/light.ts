@@ -5,6 +5,7 @@ export const light = {
     secundary: "rgba(129, 123, 233, 1)",
 
     primaryOpacity: "rgba(253, 192, 113, 0.4)",
+    secundaryOpacity: "rgba(129, 123, 233, 0.4)",
 
     background: "rgba(245, 246, 248, 1)",
     card: "rgba(255, 255, 255, 1)",
@@ -14,6 +15,8 @@ export const light = {
 
     white: "#FFF",
     green: "rgba(123, 164, 113, 1)",
+    greenOpacity: "rgba(123, 164, 113, 0.4)",
     red: "rgba(197, 71, 73, 1)",
+    redOpacity: "rgba(197, 71, 73, 0.4)",
   },
 };

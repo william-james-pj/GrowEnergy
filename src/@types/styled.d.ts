@@ -8,6 +8,7 @@ declare module "styled-components" {
       secundary: string;
 
       primaryOpacity: string;
+      secundaryOpacity: string;
 
       background: string;
       card: string;
@@ -17,7 +18,9 @@ declare module "styled-components" {
 
       white: string;
       green: string;
+      greenOpacity: string;
       red: string;
+      redOpacity: string;
     };
   }
 }
