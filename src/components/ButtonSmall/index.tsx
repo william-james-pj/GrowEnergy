@@ -8,9 +8,10 @@ import * as S from "./styles";
 type ButtonSmallProps = {
   text: string;
   onPress: () => void;
+  type?: boolean;
 };
 
-export function ButtonSmall({ onPress, text }: ButtonSmallProps) {
+export function ButtonSmall({ onPress, text, type = true }: ButtonSmallProps) {
   const styles = StyleSheet.create({
     button: {
       position: "absolute",
@@ -24,10 +25,10 @@ export function ButtonSmall({ onPress, text }: ButtonSmallProps) {
   });
 
   return (
-    <S.Wrapper>
+    <S.Wrapper isPrimary={type}>
       <RectButton style={styles.button} onPress={onPress}></RectButton>
       <S.Button>
-        <S.Text>{text}</S.Text>
+        <S.Text isPrimary={type}>{text}</S.Text>
       </S.Button>
     </S.Wrapper>
   );

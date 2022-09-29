@@ -11,6 +11,7 @@ type TextInputProps = {
   setValidatedStatus?: (status: boolean) => void;
   errorText?: string;
   widhtBox?: string;
+  heightBox?: string;
   keyboardType?: "default" | "email-address";
 };
 
@@ -28,6 +29,7 @@ export function TextInput({
   setValidatedStatus,
   errorText = "",
   widhtBox = "100%",
+  heightBox = "58px",
   keyboardType = "default",
 }: TextInputProps) {
   const [validState, setValidState] = useState<InputState>(Pristine);
@@ -49,7 +51,7 @@ export function TextInput({
 
   return (
     <S.Wrapper>
-      <S.Box color={validState} width={widhtBox}>
+      <S.Box color={validState} width={widhtBox} height={heightBox}>
         <S.TextInput
           underlineColorAndroid="transparent"
           placeholder={placeholder}

@@ -7,6 +7,7 @@ const Pristine = null;
 type BoxProps = {
   color: typeof Valid | typeof Invalid | typeof Pristine;
   width: string;
+  height: string;
 };
 
 export const Wrapper = styled.View`
@@ -20,7 +21,7 @@ export const Wrapper = styled.View`
 
 export const Box = styled.View<BoxProps>`
   width: ${(props) => props.width};
-  height: 58px;
+  height: ${(props) => props.height};
   background: ${(props) => props.theme.colors.card};
 
   justify-content: center;

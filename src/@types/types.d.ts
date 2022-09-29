@@ -26,6 +26,13 @@ type CondominiumsNavigationProp =
 
 type DrawerScreenProps = DrawerScreenProps;
 
+type UsersParamList = {
+  Users: undefined;
+  AddUser: undefined;
+};
+
+type UsersNavigationProp = NativeStackNavigationProp<UsersParamList>;
+
 type UserType = {
   id: string;
 };

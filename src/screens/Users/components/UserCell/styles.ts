@@ -12,6 +12,7 @@ type StatusType = {
 export const ViewWrapper = styled.View`
   background: ${(props) => props.theme.colors.card};
   flex-direction: row;
+  align-items: center;
   padding: 8px 16px;
 `;
 

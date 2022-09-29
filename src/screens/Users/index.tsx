@@ -1,6 +1,9 @@
 import React, { useRef } from "react";
 import { StyleSheet } from "react-native";
 
+import { useNavigation } from "@react-navigation/native";
+import { UsersNavigationProp } from "../../@types/types";
+
 import { FlatList, RectButton } from "react-native-gesture-handler";
 
 import { useDarkMode } from "../../hooks/userDarkMode";
@@ -15,6 +18,7 @@ import * as S from "./styles";
 
 export function Users() {
   const { theme } = useDarkMode();
+  const navigation = useNavigation<UsersNavigationProp>();
 
   const data: UserType[] = [{ id: "1" }, { id: "2" }];
   const flatList = useRef<FlatList<UserType>>(null);
@@ -29,7 +33,10 @@ export function Users() {
       <S.ViewRow>
         <S.TextTitle>Todos os usuários</S.TextTitle>
         <S.ViewButton>
-          <RectButton style={styles.button} onPress={() => {}}></RectButton>
+          <RectButton
+            style={styles.button}
+            onPress={() => navigation.navigate("AddUser")}
+          ></RectButton>
           <S.TextButton>Adicionar usuário</S.TextButton>
         </S.ViewButton>
       </S.ViewRow>

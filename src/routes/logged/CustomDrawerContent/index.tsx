@@ -74,8 +74,8 @@ export function CustomDrawerContent(props: DrawerContentComponentProps) {
             style={styles.drawerItem}
             activeBackgroundColor={theme.colors.primaryOpacity}
             inactiveBackgroundColor={theme.colors.background}
-            focused={routerName[props.state.index] === "Users"}
-            onPress={() => props.navigation.navigate("Users")}
+            focused={routerName[props.state.index] === "UsersStack"}
+            onPress={() => props.navigation.navigate("UsersStack")}
             icon={({ focused }) => (
               <S.ViewIconMenu>
                 <UsersMenuSvg
