@@ -1,4 +1,5 @@
-import React, { useRef } from "react";
+import React from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import { useDarkMode } from "../../hooks/userDarkMode";
 
@@ -12,10 +13,12 @@ export function SeeDevice() {
 
   return (
     <S.ViewWrapper>
-      <Header title="Dispositivo 1" back={true} />
-      <S.TextSectionTitle>Geração total</S.TextSectionTitle>
-      <GenerationCard />
-      <S.TextSectionTitle>Performace</S.TextSectionTitle>
+      <SafeAreaView>
+        <Header title="Dispositivo 1" back={true} />
+        <S.TextSectionTitle>Geração total</S.TextSectionTitle>
+        <GenerationCard />
+        <S.TextSectionTitle>Performace</S.TextSectionTitle>
+      </SafeAreaView>
     </S.ViewWrapper>
   );
 }

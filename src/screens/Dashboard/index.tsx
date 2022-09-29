@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import { DateSelector } from "../../components/DateSelector";
 import { Header } from "../../components/Header";
@@ -35,18 +36,20 @@ export function Dashboard() {
 
   return (
     <S.ViewWrapper>
-      <Header title="Dashboard" />
-      <S.TextSectionTitle>Dashboard</S.TextSectionTitle>
+      <SafeAreaView>
+        <Header title="Dashboard" />
+        <S.TextSectionTitle>Dashboard</S.TextSectionTitle>
 
-      <S.ViewRow>
-        <LocationDropdown
-          currentValue={locationSelected}
-          data={dropdownData}
-          onChange={changeLocation}
-        />
-        <S.ViewDivision />
-        <DateSelector onChange={changeDate} />
-      </S.ViewRow>
+        <S.ViewRow>
+          <LocationDropdown
+            currentValue={locationSelected}
+            data={dropdownData}
+            onChange={changeLocation}
+          />
+          <S.ViewDivision />
+          <DateSelector onChange={changeDate} />
+        </S.ViewRow>
+      </SafeAreaView>
     </S.ViewWrapper>
   );
 }

@@ -1,4 +1,5 @@
 import React, { useRef } from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import { FlatList } from "react-native";
 import { CondominiumsType } from "../../@types/types";
@@ -34,20 +35,22 @@ export function Condominiums() {
 
   return (
     <S.ViewWrapper>
-      <Header title="Condomínios" />
-      <FlatList
-        ref={flatList}
-        removeClippedSubviews={false}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 25 }}
-        data={data}
-        renderItem={renderRows}
-        keyExtractor={(item) => item.id}
-        ItemSeparatorComponent={() => <S.Separator></S.Separator>}
-        ListFooterComponent={() => <S.FooterView></S.FooterView>}
-        ListEmptyComponent={listEmpty}
-        style={{ marginTop: 32 }}
-      />
+      <SafeAreaView>
+        <Header title="Condomínios" />
+        <FlatList
+          ref={flatList}
+          removeClippedSubviews={false}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingBottom: 25 }}
+          data={data}
+          renderItem={renderRows}
+          keyExtractor={(item) => item.id}
+          ItemSeparatorComponent={() => <S.Separator></S.Separator>}
+          ListFooterComponent={() => <S.FooterView></S.FooterView>}
+          ListEmptyComponent={listEmpty}
+          style={{ marginTop: 32 }}
+        />
+      </SafeAreaView>
     </S.ViewWrapper>
   );
 }

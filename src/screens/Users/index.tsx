@@ -1,4 +1,5 @@
 import React, { useRef } from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { StyleSheet } from "react-native";
 
 import { useNavigation } from "@react-navigation/native";
@@ -29,34 +30,36 @@ export function Users() {
 
   return (
     <S.ViewWrapper>
-      <Header title="Usuários" />
-      <S.ViewRow>
-        <S.TextTitle>Todos os usuários</S.TextTitle>
-        <S.ViewButton>
-          <RectButton
-            style={styles.button}
-            onPress={() => navigation.navigate("AddUser")}
-          ></RectButton>
-          <S.TextButton>Adicionar usuário</S.TextButton>
-        </S.ViewButton>
-      </S.ViewRow>
+      <SafeAreaView style={{ flex: 1 }}>
+        <Header title="Usuários" />
+        <S.ViewRow>
+          <S.TextTitle>Todos os usuários</S.TextTitle>
+          <S.ViewButton>
+            <RectButton
+              style={styles.button}
+              onPress={() => navigation.navigate("AddUser")}
+            ></RectButton>
+            <S.TextButton>Adicionar usuário</S.TextButton>
+          </S.ViewButton>
+        </S.ViewRow>
 
-      <FlatList
-        style={{ flex: 1 }}
-        ref={flatList}
-        removeClippedSubviews={false}
-        showsVerticalScrollIndicator={false}
-        data={data}
-        renderItem={renderRows}
-        keyExtractor={(item) => item.id}
-        ItemSeparatorComponent={() => <S.Separator></S.Separator>}
-        ListFooterComponent={() => <S.FooterView></S.FooterView>}
-        ListHeaderComponent={() => <UserHeader />}
-        ListHeaderComponentStyle={{
-          borderBottomWidth: 1,
-          borderBottomColor: theme.colors.disabled,
-        }}
-      />
+        <FlatList
+          style={{ flex: 1 }}
+          ref={flatList}
+          removeClippedSubviews={false}
+          showsVerticalScrollIndicator={false}
+          data={data}
+          renderItem={renderRows}
+          keyExtractor={(item) => item.id}
+          ItemSeparatorComponent={() => <S.Separator></S.Separator>}
+          ListFooterComponent={() => <S.FooterView></S.FooterView>}
+          ListHeaderComponent={() => <UserHeader />}
+          ListHeaderComponentStyle={{
+            borderBottomWidth: 1,
+            borderBottomColor: theme.colors.disabled,
+          }}
+        />
+      </SafeAreaView>
     </S.ViewWrapper>
   );
 }

@@ -1,4 +1,5 @@
 import React, { useRef } from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import { FlatList } from "react-native";
 import { DevicesType } from "../../@types/types";
@@ -35,26 +36,28 @@ export function SeeCondominium() {
 
   return (
     <S.ViewWrapper>
-      <Header title="Condomínio 1" back={true} />
-      <S.TextSectionTitle>Overview</S.TextSectionTitle>
-      <S.ViewRow>
-        <SeeConOverviewBox title={"Geração total"} value={20.14} />
-        <SeeConOverviewBox title={"Consumo total"} value={15.14} isSecudary />
-      </S.ViewRow>
+      <SafeAreaView>
+        <Header title="Condomínio 1" back={true} />
+        <S.TextSectionTitle>Overview</S.TextSectionTitle>
+        <S.ViewRow>
+          <SeeConOverviewBox title={"Geração total"} value={20.14} />
+          <SeeConOverviewBox title={"Consumo total"} value={15.14} isSecudary />
+        </S.ViewRow>
 
-      <S.TextSectionTitle>Dispositivios</S.TextSectionTitle>
-      <FlatList
-        ref={flatList}
-        removeClippedSubviews={false}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 25 }}
-        data={data}
-        renderItem={renderRows}
-        keyExtractor={(item) => item.id}
-        ItemSeparatorComponent={() => <S.Separator></S.Separator>}
-        ListFooterComponent={() => <S.FooterView></S.FooterView>}
-        ListEmptyComponent={listEmpty}
-      />
+        <S.TextSectionTitle>Dispositivios</S.TextSectionTitle>
+        <FlatList
+          ref={flatList}
+          removeClippedSubviews={false}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingBottom: 25 }}
+          data={data}
+          renderItem={renderRows}
+          keyExtractor={(item) => item.id}
+          ItemSeparatorComponent={() => <S.Separator></S.Separator>}
+          ListFooterComponent={() => <S.FooterView></S.FooterView>}
+          ListEmptyComponent={listEmpty}
+        />
+      </SafeAreaView>
     </S.ViewWrapper>
   );
 }

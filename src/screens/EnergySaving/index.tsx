@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { DateSelector } from "../../components/DateSelector";
 
 import { Header } from "../../components/Header";
@@ -37,40 +38,42 @@ export function EnergySaving() {
 
   return (
     <S.ViewWrapper>
-      <Header title="Economia de energia" back={true} />
-      <S.ViewRow style={{ marginTop: 32 }}>
-        <BoxValueSaving
-          title={`Total economizado\nno mês atual`}
-          value={200.8}
-        />
-        <BoxValueSaving
-          title={`Tarifa de energia\nelétrica`}
-          value={0.594}
-          isSecudary={true}
-        />
-      </S.ViewRow>
-      <S.TextSection>Overview</S.TextSection>
-      <S.ViewOptions>
-        <LocationDropdown
-          currentValue={locationSelected}
-          data={dropdownData}
-          onChange={changeLocation}
-        />
-        <S.ViewDivision />
-        <DateSelector onChange={changeDate} />
-      </S.ViewOptions>
-      <S.ViewRow style={{ marginTop: 16 }}>
-        <BoxValueSaving
-          title={`Economia de\nenergia`}
-          value={200.8}
-          date={"Ago"}
-        />
-        <BoxValueSaving
-          title={`Economia de\nenergia`}
-          value={1406.4}
-          date={"2022"}
-        />
-      </S.ViewRow>
+      <SafeAreaView>
+        <Header title="Economia de energia" back={true} />
+        <S.ViewRow style={{ marginTop: 32 }}>
+          <BoxValueSaving
+            title={`Total economizado\nno mês atual`}
+            value={200.8}
+          />
+          <BoxValueSaving
+            title={`Tarifa de energia\nelétrica`}
+            value={0.594}
+            isSecudary={true}
+          />
+        </S.ViewRow>
+        <S.TextSection>Overview</S.TextSection>
+        <S.ViewOptions>
+          <LocationDropdown
+            currentValue={locationSelected}
+            data={dropdownData}
+            onChange={changeLocation}
+          />
+          <S.ViewDivision />
+          <DateSelector onChange={changeDate} />
+        </S.ViewOptions>
+        <S.ViewRow style={{ marginTop: 16 }}>
+          <BoxValueSaving
+            title={`Economia de\nenergia`}
+            value={200.8}
+            date={"Ago"}
+          />
+          <BoxValueSaving
+            title={`Economia de\nenergia`}
+            value={1406.4}
+            date={"2022"}
+          />
+        </S.ViewRow>
+      </SafeAreaView>
     </S.ViewWrapper>
   );
 }

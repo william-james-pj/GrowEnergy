@@ -5,7 +5,7 @@ export const ViewWrapper = styled.View`
   background: ${(props) => props.theme.colors.background};
   flex: 1;
   display: flex;
-  padding: 0px 16px;
+  padding: 32px 16px;
 `;
 
 export const ViewForm = styled.View`
