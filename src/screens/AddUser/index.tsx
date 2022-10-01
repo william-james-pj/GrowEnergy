@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import { StyleSheet } from "react-native";
+import React, { useState, useEffect } from "react";
+import { StyleSheet, Modal, ToastAndroid } from "react-native";
+import * as Clipboard from "expo-clipboard";
 
 import { SafeAreaView } from "react-native-safe-area-context";
 import { KeyboardAvoidingView, Platform } from "react-native";
@@ -12,12 +13,18 @@ import { TextInput } from "../../components/TextInput";
 import { ToggleSwitch } from "../../components/ToggleSwitch";
 import { RuleSelecter } from "./components/RuleSelecter";
 import { CondominiumTable } from "./components/CondominiumTable";
+import { ButtonSmall } from "../../components/ButtonSmall";
+
 import { UserRule } from "../../constants/user";
+import { generatePassword } from "../../utils/generatePassword";
 
 import RecoverSVG from "../../assets/svg/Recover.svg";
+import EyeSlashSVG from "../../assets/svg/Eye-slash.svg";
+import EyeSVG from "../../assets/svg/Eye.svg";
+import CopySVG from "../../assets/svg/Copy.svg";
 
 import * as S from "./styles";
-import { ButtonSmall } from "../../components/ButtonSmall";
+import { ConfirmModal } from "../../components/ConfirmModal";
 
 export function AddUser() {
   const { theme } = useDarkMode();
@@ -28,6 +35,9 @@ export function AddUser() {
   const [status, setStatus] = useState(true);
   const [rule, setRule] = useState<UserRule>(UserRule.admin);
 
+  const [isShowPassword, setIsShowPassword] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+
   const handleToggleStatus = () => {
     setStatus(!status);
   };
@@ -35,6 +45,21 @@ export function AddUser() {
   const handleRule = (newValue: UserRule) => {
     setRule(newValue);
   };
+
+  const passwordReset = () => {
+    setPassword(generatePassword(8));
+  };
+
+  const copyToClipboard = async () => {
+    await Clipboard.setStringAsync(password);
+    ToastAndroid.show("Senha copiada", ToastAndroid.SHORT);
+  };
+
+  useEffect(() => {
+    passwordReset();
+
+    return () => {};
+  }, []);
 
   return (
     <S.ViewWrapper>
@@ -73,11 +98,40 @@ export function AddUser() {
 
               <S.ViewRowPassword>
                 <S.TextInputLabel>Senha</S.TextInputLabel>
-                <RectButton style={styles.recoverPassword} onPress={() => {}}>
+                <RectButton
+                  style={styles.recoverPassword}
+                  onPress={() => setModalVisible(true)}
+                >
                   <RecoverSVG fill={theme.colors.disabled} />
                   <S.TextRecoverPassword>Redefinir senha</S.TextRecoverPassword>
                 </RectButton>
               </S.ViewRowPassword>
+              <S.ViewRowInput>
+                <S.TextInputPassword
+                  underlineColorAndroid="transparent"
+                  value={password}
+                  secureTextEntry={!isShowPassword}
+                  keyboardType={"default"}
+                  autoCapitalize={"none"}
+                />
+                <RectButton
+                  style={[styles.buttonOptins, { marginRight: 16 }]}
+                  onPress={() => setIsShowPassword(!isShowPassword)}
+                >
+                  {!isShowPassword ? (
+                    <EyeSlashSVG fill={theme.colors.disabled} />
+                  ) : (
+                    <EyeSVG fill={theme.colors.disabled} />
+                  )}
+                </RectButton>
+
+                <RectButton
+                  style={styles.buttonOptins}
+                  onPress={copyToClipboard}
+                >
+                  <CopySVG fill={theme.colors.disabled} />
+                </RectButton>
+              </S.ViewRowInput>
 
               <S.ViewRow>
                 <S.ViewRule>
@@ -131,6 +185,18 @@ export function AddUser() {
           </ScrollView>
         </KeyboardAvoidingView>
       </SafeAreaView>
+      <Modal animationType="slide" transparent={true} visible={modalVisible}>
+        <ConfirmModal
+          title="Você tem certeza?"
+          description="Você realmente quer redefinir a senha deste usuário?"
+          buttonTitle="Redefinir"
+          onClose={() => setModalVisible(false)}
+          onPress={() => {
+            passwordReset();
+            setModalVisible(false);
+          }}
+        />
+      </Modal>
     </S.ViewWrapper>
   );
 }
@@ -150,6 +216,11 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
+    borderRadius: 8,
+    zIndex: 99,
+  },
+  buttonOptins: {
+    padding: 4,
     borderRadius: 8,
     zIndex: 99,
   },

@@ -33,6 +33,21 @@ export const TextRecoverPassword = styled.Text`
   margin-left: 8px;
 `;
 
+export const ViewRowInput = styled.View`
+  flex-direction: row;
+  align-items: center;
+  margin-top: 8px;
+`;
+
+export const TextInputPassword = styled.TextInput.attrs((props) => ({
+  placeholderTextColor: props.theme.colors.disabled,
+}))`
+  color: ${(props) => props.theme.colors.text};
+  background: ${(props) => props.theme.colors.background};
+  font-family: ${fonts.type.text400};
+  width: 100px;
+`;
+
 export const ViewRow = styled.View`
   flex-direction: row;
   justify-content: space-between;
