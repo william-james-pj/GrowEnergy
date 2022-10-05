@@ -35,6 +35,14 @@ type UsersNavigationProp = NativeStackNavigationProp<UsersParamList>;
 
 type UserType = {
   id: string;
+  idToken: string;
+};
+
+type NewUserType = {
+  displayName: string;
+  email: string;
+  password: string;
+  role: string;
 };
 
 type CondominiumsType = {

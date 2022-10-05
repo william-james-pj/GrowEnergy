@@ -40,9 +40,11 @@ export function AuthContextProvider(props: AuthContextProviderProps) {
       );
 
       const uid = userCredential.user?.uid;
+      const token = await userCredential.user.getIdToken();
 
       setUser({
         id: uid || "",
+        idToken: token,
       });
     } catch (error: any) {
       if (error.code === "auth/email-already-in-use") {
@@ -61,8 +63,11 @@ export function AuthContextProvider(props: AuthContextProviderProps) {
         password
       );
       const uid = userCredential.user?.uid;
+      const token = await userCredential.user.getIdToken();
+
       setUser({
         id: uid || "",
+        idToken: token,
       });
       setErrorMsg("");
     } catch (error: any) {
@@ -92,8 +97,11 @@ export function AuthContextProvider(props: AuthContextProviderProps) {
       if (userAuth) {
         const { uid } = userAuth;
 
+        const token = await userAuth.getIdToken(true);
+
         setUser({
           id: uid,
+          idToken: token,
         });
       }
     });

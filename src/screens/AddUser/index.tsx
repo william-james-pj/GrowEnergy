@@ -6,6 +6,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { KeyboardAvoidingView, Platform } from "react-native";
 import { RectButton, ScrollView } from "react-native-gesture-handler";
 
+import { useNavigation } from "@react-navigation/native";
+import { useUser } from "../../hooks/useUser";
 import { useDarkMode } from "../../hooks/userDarkMode";
 
 import { Header } from "../../components/Header";
@@ -14,9 +16,13 @@ import { ToggleSwitch } from "../../components/ToggleSwitch";
 import { RuleSelecter } from "./components/RuleSelecter";
 import { CondominiumTable } from "./components/CondominiumTable";
 import { ButtonSmall } from "../../components/ButtonSmall";
+import { ConfirmModal } from "../../components/ConfirmModal";
+import { Loading } from "../../components/Loading";
 
 import { UserRule } from "../../constants/user";
 import { generatePassword } from "../../utils/generatePassword";
+import { emailValidator } from "../../utils/emailValidator";
+import { DrawerScreenProps, NewUserType } from "../../@types/types";
 
 import RecoverSVG from "../../assets/svg/Recover.svg";
 import EyeSlashSVG from "../../assets/svg/Eye-slash.svg";
@@ -24,16 +30,18 @@ import EyeSVG from "../../assets/svg/Eye.svg";
 import CopySVG from "../../assets/svg/Copy.svg";
 
 import * as S from "./styles";
-import { ConfirmModal } from "../../components/ConfirmModal";
 
 export function AddUser() {
   const { theme } = useDarkMode();
+  const { isLoading, creatUser } = useUser();
+  const navigation = useNavigation<DrawerScreenProps>();
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [status, setStatus] = useState(true);
   const [rule, setRule] = useState<UserRule>(UserRule.admin);
+  const [validatedStatus, setValidatedStatus] = useState(true);
 
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
@@ -55,11 +63,30 @@ export function AddUser() {
     ToastAndroid.show("Senha copiada", ToastAndroid.SHORT);
   };
 
+  const addUser = async () => {
+    if (!email.trim().length || !password.trim().length || !name.trim().length)
+      return;
+
+    if (!validatedStatus) return;
+
+    const newUser: NewUserType = {
+      displayName: name,
+      email: email,
+      password: password,
+      role: rule,
+    };
+
+    await creatUser(newUser);
+    ToastAndroid.show("Usuário adicionado", ToastAndroid.SHORT);
+    navigation.goBack();
+  };
+
   useEffect(() => {
     passwordReset();
-
     return () => {};
   }, []);
+
+  if (isLoading) return <Loading />;
 
   return (
     <S.ViewWrapper>
@@ -77,8 +104,6 @@ export function AddUser() {
                 placeholder={"Nome"}
                 onChangeText={setName}
                 value={name}
-                // validator={emailValidator}
-                // setValidatedStatus={setValidatedStatus}
                 errorText={""}
                 keyboardType={"default"}
                 heightBox={"40px"}
@@ -89,8 +114,8 @@ export function AddUser() {
                 placeholder={"E-mail"}
                 onChangeText={setEmail}
                 value={email}
-                // validator={emailValidator}
-                // setValidatedStatus={setValidatedStatus}
+                validator={emailValidator}
+                setValidatedStatus={setValidatedStatus}
                 errorText={"Por favor insira um endereço de e-mail válido"}
                 keyboardType={"email-address"}
                 heightBox={"40px"}
@@ -180,7 +205,7 @@ export function AddUser() {
             <S.ViewButtonContainer>
               <ButtonSmall text="Cancelar" type={false} onPress={() => {}} />
               <S.ViewSeparator />
-              <ButtonSmall text="Salvar" onPress={() => {}} />
+              <ButtonSmall text="Salvar" onPress={addUser} />
             </S.ViewButtonContainer>
           </ScrollView>
         </KeyboardAvoidingView>
