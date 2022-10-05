@@ -2,11 +2,12 @@ import React, { createContext, ReactNode, useState, useEffect } from "react";
 
 import axios from "axios";
 
-import { NewUserType } from "../@types/types";
+import { NewUserType, UserType } from "../@types/types";
 import { useAuth } from "../hooks/useAuth";
 
 type UserContextType = {
   isLoading: boolean;
+  users: UserType[];
   getUsers: () => Promise<void>;
   creatUser: (newUser: NewUserType) => Promise<void>;
 };
@@ -21,9 +22,8 @@ export function UserContextProvider(props: UserContextProviderProps) {
   const baseUrl = "https://us-central1-growenergy-4a892.cloudfunctions.net/api";
 
   const { user } = useAuth();
+  const [users, setUsers] = useState<UserType[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-
-  //add loader
 
   async function getUsers() {
     try {
@@ -31,7 +31,20 @@ export function UserContextProvider(props: UserContextProviderProps) {
         headers: { Authorization: `Bearer ${user?.idToken}` },
       });
       if (response.status === 200) {
-        console.log(response.data);
+        var aux: UserType[] = [];
+
+        response.data.users.forEach((element: any) => {
+          aux.push({
+            id: element.uid,
+            displayName: element.displayName,
+            email: element.email,
+            role: element.role,
+            idToken: "",
+            disabled: element.disabled,
+          });
+        });
+        aux.sort(compareUser);
+        setUsers(aux);
       }
     } catch (error) {
       console.log(error);
@@ -45,9 +58,9 @@ export function UserContextProvider(props: UserContextProviderProps) {
       const response = await axios.post(`${baseUrl}/users`, newUser, {
         headers: { Authorization: `Bearer ${user?.idToken}` },
       });
-      if (response.status === 200) {
-        console.log(response.data);
-      }
+      // if (response.status === 200) {
+      //   console.log(response.data);
+      // }
       setIsLoading(false);
     } catch (error) {
       console.log(error);
@@ -55,8 +68,18 @@ export function UserContextProvider(props: UserContextProviderProps) {
     }
   }
 
+  function compareUser(a: UserType, b: UserType) {
+    if (a.role > b.role) {
+      return 1;
+    }
+    if (a.role < b.role) {
+      return -1;
+    }
+    return 0;
+  }
+
   return (
-    <UserContext.Provider value={{ isLoading, getUsers, creatUser }}>
+    <UserContext.Provider value={{ isLoading, users, getUsers, creatUser }}>
       {props.children}
     </UserContext.Provider>
   );

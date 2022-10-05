@@ -19,7 +19,7 @@ export const TextName = styled.Text`
   color: ${(props) => props.theme.colors.disabled};
   font-size: ${fonts.size.xxs};
   font-family: ${fonts.type.text700};
-  flex: 1;
+  flex: 1.5;
 `;
 
 export const TextEmail = styled.Text`

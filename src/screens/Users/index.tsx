@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StyleSheet } from "react-native";
 
@@ -8,6 +8,7 @@ import { UsersNavigationProp } from "../../@types/types";
 import { FlatList, RectButton } from "react-native-gesture-handler";
 
 import { useDarkMode } from "../../hooks/userDarkMode";
+import { useUser } from "../../hooks/useUser";
 
 import { Header } from "../../components/Header";
 import { UserHeader } from "./components/UserHeader";
@@ -18,15 +19,26 @@ import { UserType } from "../../@types/types";
 import * as S from "./styles";
 
 export function Users() {
-  const { theme } = useDarkMode();
   const navigation = useNavigation<UsersNavigationProp>();
+  const { theme } = useDarkMode();
+  const { getUsers, users } = useUser();
 
-  const data: UserType[] = [{ id: "1" }, { id: "2" }];
   const flatList = useRef<FlatList<UserType>>(null);
 
   const renderRows = ({ item }: { item: UserType }) => {
-    return <UserCell />;
+    return <UserCell user={item} />;
   };
+
+  useEffect(() => {
+    console.log("effect ------");
+    getUsers();
+
+    const willFocusSubscription = navigation.addListener("focus", () => {
+      getUsers();
+    });
+
+    return willFocusSubscription;
+  }, []);
 
   return (
     <S.ViewWrapper>
@@ -48,7 +60,7 @@ export function Users() {
           ref={flatList}
           removeClippedSubviews={false}
           showsVerticalScrollIndicator={false}
-          data={data}
+          data={users}
           renderItem={renderRows}
           keyExtractor={(item) => item.id}
           ItemSeparatorComponent={() => <S.Separator></S.Separator>}

@@ -7,25 +7,34 @@ import { useDarkMode } from "../../../../hooks/userDarkMode";
 import EditSvg from "../../../../assets/svg/Edit.svg";
 
 import * as S from "./styles";
+import { UserType } from "../../../../@types/types";
 
-export function UserCell() {
+type UserCellProps = {
+  user: UserType;
+};
+
+export function UserCell({ user }: UserCellProps) {
   const { theme } = useDarkMode();
 
   return (
     <S.ViewWrapper>
-      <S.TextName>Admin</S.TextName>
+      <S.TextName>{user.displayName}</S.TextName>
 
-      <S.TextEmail>admin@app.com</S.TextEmail>
+      <S.TextEmail>{user.email}</S.TextEmail>
 
       <S.ViewRule>
-        <S.ViewRuleBox type={true}>
-          <S.TextRuleBoxText type={true}>Admin</S.TextRuleBoxText>
+        <S.ViewRuleBox type={user.role === "admin"}>
+          <S.TextRuleBoxText type={user.role === "admin"}>
+            {user.role === "admin" ? "Admin" : "Síndico"}
+          </S.TextRuleBoxText>
         </S.ViewRuleBox>
       </S.ViewRule>
 
       <S.ViewStatus>
-        <S.ViewStatusBox active={true}>
-          <S.TextStatusBoxText active={true}>Ativo</S.TextStatusBoxText>
+        <S.ViewStatusBox active={!user.disabled}>
+          <S.TextStatusBoxText active={!user.disabled}>
+            {!user.disabled ? "Ativo" : "Inativo"}
+          </S.TextStatusBoxText>
         </S.ViewStatusBox>
       </S.ViewStatus>
 

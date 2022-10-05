@@ -44,7 +44,11 @@ export function AuthContextProvider(props: AuthContextProviderProps) {
 
       setUser({
         id: uid || "",
+        displayName: userCredential.user?.displayName ?? "",
+        email: userCredential.user?.email ?? "",
+        role: "",
         idToken: token,
+        disabled: false,
       });
     } catch (error: any) {
       if (error.code === "auth/email-already-in-use") {
@@ -67,7 +71,11 @@ export function AuthContextProvider(props: AuthContextProviderProps) {
 
       setUser({
         id: uid || "",
+        displayName: userCredential.user?.displayName ?? "",
+        email: userCredential.user?.email ?? "",
+        role: "",
         idToken: token,
+        disabled: false,
       });
       setErrorMsg("");
     } catch (error: any) {
@@ -95,13 +103,17 @@ export function AuthContextProvider(props: AuthContextProviderProps) {
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (userAuth) => {
       if (userAuth) {
-        const { uid } = userAuth;
+        const { uid, email, displayName } = userAuth;
 
         const token = await userAuth.getIdToken(true);
 
         setUser({
           id: uid,
+          displayName: displayName ?? "",
+          email: email ?? "",
+          role: "",
           idToken: token,
+          disabled: false,
         });
       }
     });

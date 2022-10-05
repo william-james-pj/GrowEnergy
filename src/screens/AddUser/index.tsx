@@ -38,7 +38,7 @@ export function AddUser() {
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [password, setPassword] = useState("password123");
   const [status, setStatus] = useState(true);
   const [rule, setRule] = useState<UserRule>(UserRule.admin);
   const [validatedStatus, setValidatedStatus] = useState(true);
@@ -74,6 +74,7 @@ export function AddUser() {
       email: email,
       password: password,
       role: rule,
+      disabled: !status,
     };
 
     await creatUser(newUser);
@@ -82,7 +83,7 @@ export function AddUser() {
   };
 
   useEffect(() => {
-    passwordReset();
+    // passwordReset();
     return () => {};
   }, []);
 
