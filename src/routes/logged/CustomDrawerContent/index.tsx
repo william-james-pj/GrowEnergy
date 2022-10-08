@@ -22,7 +22,15 @@ import * as S from "./styles";
 export function CustomDrawerContent(props: DrawerContentComponentProps) {
   const routerName = props.state.routeNames;
   const theme = useTheme();
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
+
+  const getName = (): string => {
+    if (user?.displayName) {
+      let name = user.displayName.split(" ");
+      return name[0];
+    }
+    return "";
+  };
 
   const styles = StyleSheet.create({
     buttonLogOut: {
@@ -46,7 +54,7 @@ export function CustomDrawerContent(props: DrawerContentComponentProps) {
         <S.ViewUserRow>
           <S.ViewUserInfo>
             <S.ViewUserImgBox></S.ViewUserImgBox>
-            <S.TextUserName>User name</S.TextUserName>
+            <S.TextUserName>{getName()}</S.TextUserName>
           </S.ViewUserInfo>
           <IconColorMode />
         </S.ViewUserRow>
