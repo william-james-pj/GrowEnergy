@@ -9,6 +9,7 @@ import { RectButton, ScrollView } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import { useUser } from "../../hooks/useUser";
 import { useDarkMode } from "../../hooks/userDarkMode";
+import { useUserUpdate } from "../../hooks/useUserUpdate";
 
 import { Header } from "../../components/Header";
 import { TextInput } from "../../components/TextInput";
@@ -33,7 +34,8 @@ import * as S from "./styles";
 
 export function AddUser() {
   const { theme } = useDarkMode();
-  const { isLoading, creatUser } = useUser();
+  const { isLoading, creatUser, updateUser } = useUser();
+  const { getUser, clearUser } = useUserUpdate();
   const navigation = useNavigation<DrawerScreenProps>();
 
   const [name, setName] = useState("");
@@ -44,6 +46,7 @@ export function AddUser() {
   const [validatedStatus, setValidatedStatus] = useState(true);
 
   const [isShowPassword, setIsShowPassword] = useState(false);
+  const [isAllowedShowPassword, setIsAllowedShowPassword] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
 
   const handleToggleStatus = () => {
@@ -58,9 +61,34 @@ export function AddUser() {
     setPassword(generatePassword(8));
   };
 
+  const showPassword = () => {
+    if (!isAllowedShowPassword) {
+      ToastAndroid.show("A senha não pode ser exibida", ToastAndroid.SHORT);
+      return;
+    }
+
+    setIsShowPassword(!isShowPassword);
+  };
+
   const copyToClipboard = async () => {
+    if (!isAllowedShowPassword) {
+      ToastAndroid.show("A senha não pode ser copiada", ToastAndroid.SHORT);
+      return;
+    }
+
     await Clipboard.setStringAsync(password);
     ToastAndroid.show("Senha copiada", ToastAndroid.SHORT);
+  };
+
+  const handlerButton = async () => {
+    if (!isAllowedShowPassword) {
+      // let value = getUser();
+      // if (value !== undefined) await updateUser(value);
+      closeModal();
+      return;
+    }
+
+    await addUser();
   };
 
   const addUser = async () => {
@@ -79,11 +107,33 @@ export function AddUser() {
 
     await creatUser(newUser);
     ToastAndroid.show("Usuário adicionado", ToastAndroid.SHORT);
+    closeModal();
+  };
+
+  const settingScreen = () => {
+    let value = getUser();
+
+    if (value === null) {
+      return;
+    }
+
+    setName(value.displayName);
+    setEmail(value.email);
+    setPassword("password");
+    setRule(value.role === "admin" ? UserRule.admin : UserRule.trustee);
+    setStatus(!value.disabled);
+
+    setIsAllowedShowPassword(false);
+  };
+
+  const closeModal = () => {
+    clearUser();
     navigation.goBack();
   };
 
   useEffect(() => {
     // passwordReset();
+    settingScreen();
     return () => {};
   }, []);
 
@@ -108,6 +158,7 @@ export function AddUser() {
                 errorText={""}
                 keyboardType={"default"}
                 heightBox={"40px"}
+                disabled={!isAllowedShowPassword}
               />
 
               <S.TextInputLabel>E-mail</S.TextInputLabel>
@@ -120,6 +171,7 @@ export function AddUser() {
                 errorText={"Por favor insira um endereço de e-mail válido"}
                 keyboardType={"email-address"}
                 heightBox={"40px"}
+                disabled={!isAllowedShowPassword}
               />
 
               <S.ViewRowPassword>
@@ -139,10 +191,11 @@ export function AddUser() {
                   secureTextEntry={!isShowPassword}
                   keyboardType={"default"}
                   autoCapitalize={"none"}
+                  editable={false}
                 />
                 <RectButton
                   style={[styles.buttonOptins, { marginRight: 16 }]}
-                  onPress={() => setIsShowPassword(!isShowPassword)}
+                  onPress={showPassword}
                 >
                   {!isShowPassword ? (
                     <EyeSlashSVG fill={theme.colors.disabled} />
@@ -162,13 +215,21 @@ export function AddUser() {
               <S.ViewRow>
                 <S.ViewRule>
                   <S.TextInputLabel>Permissão do usuário</S.TextInputLabel>
-                  <RuleSelecter radioButtons={rule} onPress={handleRule} />
+                  <RuleSelecter
+                    radioButtons={rule}
+                    onPress={handleRule}
+                    disabled={!isAllowedShowPassword}
+                  />
                 </S.ViewRule>
 
                 <S.ViewStatus>
                   <S.TextInputLabel>Status</S.TextInputLabel>
                   <S.ViewToggleContainer>
-                    <ToggleSwitch value={status} onPress={handleToggleStatus} />
+                    <ToggleSwitch
+                      value={status}
+                      onPress={handleToggleStatus}
+                      disabled={!isAllowedShowPassword}
+                    />
                     <S.TextStatus>{status ? "Ativo" : "Inativo"}</S.TextStatus>
                   </S.ViewToggleContainer>
                 </S.ViewStatus>
@@ -206,7 +267,7 @@ export function AddUser() {
             <S.ViewButtonContainer>
               <ButtonSmall text="Cancelar" type={false} onPress={() => {}} />
               <S.ViewSeparator />
-              <ButtonSmall text="Salvar" onPress={addUser} />
+              <ButtonSmall text="Salvar" onPress={handlerButton} />
             </S.ViewButtonContainer>
           </ScrollView>
         </KeyboardAvoidingView>

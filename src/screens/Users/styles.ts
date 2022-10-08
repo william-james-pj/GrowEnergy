@@ -45,3 +45,17 @@ export const FooterView = styled.View`
   width: 100%;
   height: 20px;
 `;
+
+export const EmptyView = styled.View`
+  background: transparent;
+  width: 100%;
+  height: 100px;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const TextEmpty = styled.Text`
+  color: ${(props) => props.theme.colors.disabled};
+  font-size: ${fonts.size.xxs};
+  font-family: ${fonts.type.text700};
+`;

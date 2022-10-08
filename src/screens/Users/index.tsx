@@ -9,6 +9,7 @@ import { FlatList, RectButton } from "react-native-gesture-handler";
 
 import { useDarkMode } from "../../hooks/userDarkMode";
 import { useUser } from "../../hooks/useUser";
+import { useUserUpdate } from "../../hooks/useUserUpdate";
 
 import { Header } from "../../components/Header";
 import { UserHeader } from "./components/UserHeader";
@@ -22,6 +23,7 @@ export function Users() {
   const navigation = useNavigation<UsersNavigationProp>();
   const { theme } = useDarkMode();
   const { getUsers, users } = useUser();
+  const { clearUser } = useUserUpdate();
 
   const flatList = useRef<FlatList<UserType>>(null);
 
@@ -29,8 +31,12 @@ export function Users() {
     return <UserCell user={item} />;
   };
 
+  const openAddUser = () => {
+    clearUser();
+    navigation.navigate("AddUser");
+  };
+
   useEffect(() => {
-    console.log("effect ------");
     getUsers();
 
     const willFocusSubscription = navigation.addListener("focus", () => {
@@ -49,7 +55,7 @@ export function Users() {
           <S.ViewButton>
             <RectButton
               style={styles.button}
-              onPress={() => navigation.navigate("AddUser")}
+              onPress={openAddUser}
             ></RectButton>
             <S.TextButton>Adicionar usuário</S.TextButton>
           </S.ViewButton>
@@ -70,6 +76,11 @@ export function Users() {
             borderBottomWidth: 1,
             borderBottomColor: theme.colors.disabled,
           }}
+          ListEmptyComponent={() => (
+            <S.EmptyView>
+              <S.TextEmpty>Carregando...</S.TextEmpty>
+            </S.EmptyView>
+          )}
         />
       </SafeAreaView>
     </S.ViewWrapper>

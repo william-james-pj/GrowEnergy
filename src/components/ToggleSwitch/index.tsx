@@ -8,9 +8,14 @@ import * as S from "./styles";
 type ToggleSwitchProps = {
   onPress: () => void;
   value: boolean;
+  disabled?: boolean;
 };
 
-export function ToggleSwitch({ onPress, value }: ToggleSwitchProps) {
+export function ToggleSwitch({
+  onPress,
+  value,
+  disabled = false,
+}: ToggleSwitchProps) {
   const styles = StyleSheet.create({
     shadowBox: {
       shadowColor: "#000",
@@ -26,6 +31,7 @@ export function ToggleSwitch({ onPress, value }: ToggleSwitchProps) {
   });
 
   const handleToggle = () => {
+    if (disabled) return;
     onPress();
   };
 

@@ -7,10 +7,17 @@ import * as S from "./styles";
 type RuleSelecterProps = {
   onPress: (newValue: UserRule) => void;
   radioButtons: UserRule;
+  disabled?: boolean;
 };
 
-export function RuleSelecter({ radioButtons, onPress }: RuleSelecterProps) {
+export function RuleSelecter({
+  radioButtons,
+  onPress,
+  disabled = false,
+}: RuleSelecterProps) {
   const handleClick = (oldValue: UserRule) => {
+    if (disabled) return;
+
     if (oldValue === UserRule.admin) {
       onPress(UserRule.admin);
       return;

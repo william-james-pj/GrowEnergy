@@ -4,6 +4,7 @@ import * as SplashScreen from "expo-splash-screen";
 import { ColorModeContext } from "./src/contexts/ColorModeContext";
 import { AuthContextProvider } from "./src/contexts/AuthContext";
 import { UserContextProvider } from "./src/contexts/UserContext";
+import { UserUpdateContextProvider } from "./src/contexts/UserUpdateContext";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 import { Routes } from "./src/routes";
@@ -34,9 +35,11 @@ export default function App() {
     <ColorModeContext>
       <AuthContextProvider>
         <UserContextProvider>
-          <GestureHandlerRootView style={{ flex: 1 }}>
-            <Routes />
-          </GestureHandlerRootView>
+          <UserUpdateContextProvider>
+            <GestureHandlerRootView style={{ flex: 1 }}>
+              <Routes />
+            </GestureHandlerRootView>
+          </UserUpdateContextProvider>
         </UserContextProvider>
       </AuthContextProvider>
     </ColorModeContext>

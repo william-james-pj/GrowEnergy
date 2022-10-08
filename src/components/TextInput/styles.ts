@@ -10,6 +10,10 @@ type BoxProps = {
   height: string;
 };
 
+type TextInputProps = {
+  disabled: boolean;
+};
+
 export const Wrapper = styled.View`
   width: 100%;
   height: auto;
@@ -39,8 +43,9 @@ export const Box = styled.View<BoxProps>`
 
 export const TextInput = styled.TextInput.attrs((props) => ({
   placeholderTextColor: props.theme.colors.disabled,
-}))`
-  color: ${(props) => props.theme.colors.text};
+}))<TextInputProps>`
+  color: ${({ theme, disabled }) =>
+    disabled ? theme.colors.disabled : theme.colors.text};
   background: ${(props) => props.theme.colors.card};
   font-family: ${fonts.type.text400};
 `;

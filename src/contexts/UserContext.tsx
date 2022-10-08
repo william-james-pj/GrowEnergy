@@ -10,6 +10,7 @@ type UserContextType = {
   users: UserType[];
   getUsers: () => Promise<void>;
   creatUser: (newUser: NewUserType) => Promise<void>;
+  updateUser: (userUpdated: UserType) => Promise<void>;
 };
 
 type UserContextProviderProps = {
@@ -68,6 +69,34 @@ export function UserContextProvider(props: UserContextProviderProps) {
     }
   }
 
+  async function updateUser(userUpdated: UserType) {
+    try {
+      let newUser = {
+        displayName: userUpdated.displayName,
+        email: userUpdated.email,
+        password: userUpdated.email,
+        // disabled: userUpdated.disabled,
+        // role: userUpdated.role,
+      };
+
+      setIsLoading(true);
+      const response = await axios.patch(
+        `${baseUrl}/users/${userUpdated.id}`,
+        newUser,
+        {
+          headers: { Authorization: `Bearer ${user?.idToken}` },
+        }
+      );
+      // if (response.status === 204) {
+      //   console.log(response.data);
+      // }
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+      setIsLoading(false);
+    }
+  }
+
   function compareUser(a: UserType, b: UserType) {
     if (a.role > b.role) {
       return 1;
@@ -79,7 +108,9 @@ export function UserContextProvider(props: UserContextProviderProps) {
   }
 
   return (
-    <UserContext.Provider value={{ isLoading, users, getUsers, creatUser }}>
+    <UserContext.Provider
+      value={{ isLoading, users, getUsers, creatUser, updateUser }}
+    >
       {props.children}
     </UserContext.Provider>
   );
