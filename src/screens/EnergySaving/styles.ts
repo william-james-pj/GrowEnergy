@@ -29,3 +29,11 @@ export const ViewDivision = styled.View`
   flex-direction: row;
   width: 16px;
 `;
+
+export const ViewSeparator = styled.View`
+  height: 16px;
+`;
+
+export const ViewFooter = styled.View`
+  height: 40px;
+`;

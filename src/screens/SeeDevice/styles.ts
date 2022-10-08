@@ -15,3 +15,11 @@ export const TextSectionTitle = styled.Text`
   margin-top: 32px;
   margin-bottom: 16px;
 `;
+
+export const ViewSeparator = styled.View`
+  height: 16px;
+`;
+
+export const ViewFooter = styled.View`
+  height: 40px;
+`;

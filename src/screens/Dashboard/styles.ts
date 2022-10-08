@@ -18,9 +18,18 @@ export const TextSectionTitle = styled.Text`
 
 export const ViewRow = styled.View`
   flex-direction: row;
+  margin-bottom: 16px;
 `;
 
 export const ViewDivision = styled.View`
   flex-direction: row;
   width: 16px;
+`;
+
+export const ViewSeparator = styled.View`
+  height: 16px;
+`;
+
+export const ViewFooter = styled.View`
+  height: 40px;
 `;
