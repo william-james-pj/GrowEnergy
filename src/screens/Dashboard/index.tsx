@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ChartBox } from "../../components/ChartBox";
+import { TwoLineChart } from "../../components/Charts/TwoLineChart";
 
 import { DateSelector } from "../../components/DateSelector";
 import { Header } from "../../components/Header";
@@ -75,23 +76,35 @@ export function Dashboard() {
               maxValue: "38",
               minValue: "30",
             }}
-          ></ChartBox>
+          >
+            <TwoLineChart
+              firstValues={[43, 40, 48, 41, 43, 48]}
+              secundaryValues={[30, 32, 33, 30, 38, 33]}
+              labelsX={["1", "7", "14", "21", "28", "31"]}
+            />
+          </ChartBox>
           <S.ViewSeparator />
           <ChartBox
             title="Geração solar"
             date="Últimos meses"
             isCompleteInfo={false}
             firstInfo={{
-              title: "Geração total",
+              title: "Geração total (kW)",
               maxValue: "580",
               minValue: "520",
             }}
             secondInfo={{
-              title: "Consumo total",
+              title: "Consumo total (kW)",
               maxValue: "520",
               minValue: "440",
             }}
-          ></ChartBox>
+          >
+            <TwoLineChart
+              firstValues={[570, 560, 520, 540, 570]}
+              secundaryValues={[460, 440, 480, 460, 490]}
+              labelsX={["Abr", "Maio", "Jun", "Jul", "Ago"]}
+            />
+          </ChartBox>
           <S.ViewFooter />
         </ScrollView>
       </SafeAreaView>

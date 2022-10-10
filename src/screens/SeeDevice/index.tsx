@@ -7,6 +7,8 @@ import { useDarkMode } from "../../hooks/userDarkMode";
 import { Header } from "../../components/Header";
 import { GenerationCard } from "./components/GenerationCard";
 import { ChartBox } from "../../components/ChartBox";
+import { OneLineChart } from "../../components/Charts/OneLineChart";
+import { BarsChart } from "../../components/Charts/BarsChart";
 
 import * as S from "./styles";
 
@@ -37,7 +39,12 @@ export function SeeDevice() {
               maxValue: "100",
               minValue: "85",
             }}
-          ></ChartBox>
+          >
+            <BarsChart
+              values={[90, 95, 85, 100, 90, 95]}
+              labelsX={["Seg", "Ter", "Qua", "Qui", "Sex", "Sab"]}
+            />
+          </ChartBox>
           <S.ViewSeparator />
           <ChartBox
             title="Geração solar"
@@ -49,7 +56,12 @@ export function SeeDevice() {
               maxValue: "320",
               minValue: "290",
             }}
-          ></ChartBox>
+          >
+            <OneLineChart
+              values={[300, 310, 290, 310, 320]}
+              labelsX={["Abr", "Maio", "Jun", "Jul", "Ago"]}
+            />
+          </ChartBox>
           <S.ViewFooter />
         </ScrollView>
       </SafeAreaView>

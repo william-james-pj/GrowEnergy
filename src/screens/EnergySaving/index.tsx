@@ -6,6 +6,7 @@ import { DateSelector } from "../../components/DateSelector";
 
 import { Header } from "../../components/Header";
 import { BoxValueSaving } from "./components/BoxValueSaving";
+import { OneLineChart } from "../../components/Charts/OneLineChart";
 import {
   DropdownDataType,
   LocationDropdown,
@@ -94,7 +95,12 @@ export function EnergySaving() {
               maxValue: "215",
               minValue: "195",
             }}
-          ></ChartBox>
+          >
+            <OneLineChart
+              values={[200, 180, 220, 230, 200]}
+              labelsX={["Abr", "Maio", "Jun", "Jul", "Ago"]}
+            />
+          </ChartBox>
           <S.ViewFooter />
         </ScrollView>
       </SafeAreaView>
