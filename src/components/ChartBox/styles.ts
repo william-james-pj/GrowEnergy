@@ -37,4 +37,5 @@ export const ViewInfo = styled.View`
 
 export const ViewChart = styled.View`
   height: 150px;
+  overflow: hidden;
 `;

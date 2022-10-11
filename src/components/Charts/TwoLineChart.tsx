@@ -16,6 +16,7 @@ export function TwoLineChart({
   secundaryValues,
   labelsX,
 }: TwoLineChartProps) {
+  const paddingR = 90;
   const { theme } = useDarkMode();
   const screenWidth = Dimensions.get("window").width;
 
@@ -76,8 +77,8 @@ export function TwoLineChart({
     <LineChart
       data={data}
       width={Math.floor(
-        35 +
-          (firstValues.length * (screenWidth - 64 - 35)) /
+        paddingR +
+          (firstValues.length * (screenWidth - 64 - paddingR)) /
             (firstValues.length - 1)
       )}
       height={150}

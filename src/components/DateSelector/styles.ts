@@ -13,12 +13,15 @@ export const ViewWrapper = styled.View`
 
 export const ViewModalContainer = styled.View`
   width: 100%;
+  height: 100%;
   align-items: center;
   justify-content: center;
 
+  background: rgba(0, 0, 0, 0.3);
+
   position: absolute;
   left: 0;
-  top: 32px;
+  top: 0;
   z-index: 999;
 `;
 

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { RectButton } from "react-native-gesture-handler";
+import { TouchableHighlight } from "react-native";
 
 import { useDarkMode } from "../../../../hooks/userDarkMode";
 
@@ -49,30 +49,33 @@ export function BoxMonths({
     <S.ViewWrapper>
       <S.ViewHeader>
         <S.TextValueSelected>{dateSelected}</S.TextValueSelected>
-        <RectButton
+        <TouchableHighlight
           style={{ padding: 4, borderRadius: 4 }}
+          underlayColor="rgba(0,0,0,0.2)"
           onPress={() => close()}
         >
           <CloseSVG fill={theme.colors.white} />
-        </RectButton>
+        </TouchableHighlight>
       </S.ViewHeader>
       <S.ViewContent>
         <S.Row>
-          <RectButton
+          <TouchableHighlight
             style={{ padding: 4, borderRadius: 4 }}
-            enabled={false}
+            underlayColor="rgba(0,0,0,0.2)"
+            disabled={true}
             onPress={() => {}}
           >
             <ArrowLeftSVG fill={theme.colors.disabled} />
-          </RectButton>
+          </TouchableHighlight>
           <S.TextYear>2022</S.TextYear>
-          <RectButton
+          <TouchableHighlight
             style={{ padding: 4, borderRadius: 4 }}
-            enabled={false}
+            underlayColor="rgba(0,0,0,0.2)"
+            disabled={true}
             onPress={() => {}}
           >
             <ArrowRightSVG fill={theme.colors.disabled} />
-          </RectButton>
+          </TouchableHighlight>
         </S.Row>
 
         <S.ViewMonths>
@@ -153,9 +156,13 @@ export function BoxMonths({
 function BoxMonth({ oldValue, value, onChange }: BoxMonthProps) {
   return (
     <S.ViewMonth isSelected={value === oldValue}>
-      <RectButton style={{ padding: 8 }} onPress={() => onChange(value)}>
+      <TouchableHighlight
+        style={{ padding: 8 }}
+        underlayColor="rgba(0,0,0,0.2)"
+        onPress={() => onChange(value)}
+      >
         <S.TextMonth>{monthName[value]}</S.TextMonth>
-      </RectButton>
+      </TouchableHighlight>
     </S.ViewMonth>
   );
 }

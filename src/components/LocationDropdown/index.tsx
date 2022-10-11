@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { FlatList, StyleSheet } from "react-native";
+import { FlatList, StyleSheet, Modal, TouchableHighlight } from "react-native";
 
 import { RectButton } from "react-native-gesture-handler";
 
@@ -41,11 +41,13 @@ export function LocationDropdown({
   const renderRows = ({ item }: { item: DropdownDataType }) => {
     return (
       <S.ViewRow>
-        <RectButton
-          style={styles.button}
+        <TouchableHighlight
+          style={{ padding: 4, borderRadius: 4, marginBottom: 4 }}
+          underlayColor="rgba(0,0,0,0.2)"
           onPress={() => changeDate(item)}
-        ></RectButton>
-        <S.TextItem>{item.label}</S.TextItem>
+        >
+          <S.TextItem>{item.label}</S.TextItem>
+        </TouchableHighlight>
       </S.ViewRow>
     );
   };
@@ -65,18 +67,25 @@ export function LocationDropdown({
 
         <ArrowSVG fill={theme.colors.disabled} />
       </S.ViewWrapper>
-      {isShow && (
+      <Modal animationType="slide" transparent={true} visible={isShow}>
         <S.ViewModalContainer>
-          <FlatList
-            ref={flatList}
-            removeClippedSubviews={false}
-            showsVerticalScrollIndicator={false}
-            data={data}
-            renderItem={renderRows}
-            keyExtractor={(item) => item.id}
-          />
+          <S.ViewModalBox>
+            <S.ViewModalHeader>
+              <S.TextModalHeader>Selecione um condomínio</S.TextModalHeader>
+            </S.ViewModalHeader>
+            <S.ViewModalContent>
+              <FlatList
+                ref={flatList}
+                removeClippedSubviews={false}
+                showsVerticalScrollIndicator={false}
+                data={data}
+                renderItem={renderRows}
+                keyExtractor={(item) => item.id}
+              />
+            </S.ViewModalContent>
+          </S.ViewModalBox>
         </S.ViewModalContainer>
-      )}
+      </Modal>
     </>
   );
 }

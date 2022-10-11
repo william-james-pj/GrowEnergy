@@ -11,6 +11,7 @@ type OneLineChartProps = {
 };
 
 export function OneLineChart({ values, labelsX }: OneLineChartProps) {
+  const paddingR = 90;
   const { theme } = useDarkMode();
   const screenWidth = Dimensions.get("window").width;
 
@@ -57,7 +58,8 @@ export function OneLineChart({ values, labelsX }: OneLineChartProps) {
     <LineChart
       data={data}
       width={Math.floor(
-        35 + (values.length * (screenWidth - 64 - 35)) / (values.length - 1)
+        paddingR +
+          (values.length * (screenWidth - 64 - paddingR)) / (values.length - 1)
       )}
       height={150}
       chartConfig={chartConfig}

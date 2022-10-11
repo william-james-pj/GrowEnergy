@@ -24,21 +24,45 @@ export const TextValue = styled.Text`
 `;
 
 export const ViewModalContainer = styled.View`
-  width: 170px;
-  height: auto;
-  max-height: 200px;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(0, 0, 0, 0.3);
+`;
+
+export const ViewModalBox = styled.View`
+  width: 220px;
+  height: 210px;
   background: ${(props) => props.theme.colors.card};
   z-index: 999;
   overflow: hidden;
-  position: absolute;
-  left: 0;
-  top: 32px;
   border-radius: 8px;
-  padding-bottom: 4px;
+  padding-bottom: 8px;
+`;
+
+export const ViewModalHeader = styled.View`
+  height: 40px;
+  background: ${(props) => props.theme.colors.primary};
+  margin-bottom: 8px;
+  justify-content: center;
+  padding: 0 16px;
+`;
+
+export const TextModalHeader = styled.Text`
+  color: ${(props) => props.theme.colors.card};
+  font-size: ${fonts.size.xs};
+  font-family: ${fonts.type.text700};
+`;
+
+export const ViewModalContent = styled.View`
+  padding: 0px 8px;
+  flex: 1;
 `;
 
 export const ViewRow = styled.View`
-  padding: 8px;
+  overflow: hidden;
 `;
 
 export const TextItem = styled.Text`

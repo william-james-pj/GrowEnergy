@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, Modal } from "react-native";
 
 import { useDarkMode } from "../../hooks/userDarkMode";
 
@@ -50,8 +50,7 @@ export function DateSelector({ onChange }: DateSelectorProps) {
 
         <ArrowSVG fill={theme.colors.disabled} />
       </S.ViewWrapper>
-
-      {isShow && (
+      <Modal animationType="slide" transparent={true} visible={isShow}>
         <S.ViewModalContainer>
           <BoxMonths
             onChange={changeDate}
@@ -61,7 +60,11 @@ export function DateSelector({ onChange }: DateSelectorProps) {
             close={() => setIsShow(false)}
           />
         </S.ViewModalContainer>
-      )}
+      </Modal>
+
+      {/* {isShow && (
+        
+      )} */}
     </>
   );
 }

@@ -32,7 +32,6 @@ export function EnergySaving() {
 
   const changeDate = (date: Date) => {
     setDateSelected(date);
-    console.log(date);
   };
 
   const changeLocation = (value: DropdownDataType) => {
