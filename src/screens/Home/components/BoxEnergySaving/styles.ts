@@ -2,7 +2,7 @@ import styled from "styled-components/native";
 import { fonts } from "../../../../styles/fonts";
 
 export const ViewWrapper = styled.View`
-  background: ${(props) => props.theme.colors.primaryOpacity};
+  background: ${(props) => props.theme.colors.cardSecundary};
   width: 100%;
   padding: 16px;
   border-radius: 8px;

@@ -12,6 +12,7 @@ declare module "styled-components" {
 
       background: string;
       card: string;
+      cardSecundary: string;
 
       text: string;
       disabled: string;

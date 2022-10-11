@@ -9,6 +9,7 @@ export const light = {
 
     background: "rgba(245, 246, 248, 1)",
     card: "rgba(255, 255, 255, 1)",
+    cardSecundary: "rgba(253, 192, 113, 0.4)",
 
     text: "rgba(41, 41, 46, 1)",
     disabled: "rgba(200, 200, 200, 1)",

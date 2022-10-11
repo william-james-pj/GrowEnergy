@@ -51,7 +51,7 @@ export const ViewModalHeader = styled.View`
 `;
 
 export const TextModalHeader = styled.Text`
-  color: ${(props) => props.theme.colors.card};
+  color: ${(props) => props.theme.colors.white};
   font-size: ${fonts.size.xs};
   font-family: ${fonts.type.text700};
 `;

@@ -23,13 +23,13 @@ export const TextTitle = styled.Text`
 `;
 
 export const ViewButton = styled.View`
-  background: ${(props) => props.theme.colors.text};
+  background: ${(props) => props.theme.colors.card};
   padding: 6px 16px;
   border-radius: 8px;
 `;
 
 export const TextButton = styled.Text`
-  color: ${(props) => props.theme.colors.white};
+  color: ${(props) => props.theme.colors.text};
   font-size: ${fonts.size.xxs};
   font-family: ${fonts.type.text700};
 `;
