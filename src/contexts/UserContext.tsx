@@ -4,6 +4,7 @@ import axios from "axios";
 
 import { NewUserType, UserType } from "../@types/types";
 import { useAuth } from "../hooks/useAuth";
+import { baseUrl } from "../constants/API";
 
 type UserContextType = {
   isLoading: boolean;
@@ -20,8 +21,6 @@ type UserContextProviderProps = {
 export const UserContext = createContext({} as UserContextType);
 
 export function UserContextProvider(props: UserContextProviderProps) {
-  const baseUrl = "https://us-central1-growenergy-4a892.cloudfunctions.net/api";
-
   const { user } = useAuth();
   const [users, setUsers] = useState<UserType[]>([]);
   const [isLoading, setIsLoading] = useState(false);

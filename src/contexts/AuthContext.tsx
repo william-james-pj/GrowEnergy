@@ -6,7 +6,10 @@ import {
   signOut,
 } from "firebase/auth";
 
+import axios from "axios";
+
 import { UserType } from "../@types/types";
+import { baseUrl } from "../constants/API";
 
 type AuthContextType = {
   user: UserType | undefined;
@@ -94,6 +97,21 @@ export function AuthContextProvider(props: AuthContextProviderProps) {
     }
   }
 
+  async function getRole(id: string, idToken: string): Promise<string | null> {
+    try {
+      const response = await axios.get(`${baseUrl}/users/${id}`, {
+        headers: { Authorization: `Bearer ${idToken}` },
+      });
+      if (response.status === 200) {
+        return response.data.user.role;
+      }
+      return null;
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
+  }
+
   function logout() {
     signOut(auth).then(() => {
       setUser(undefined);
@@ -106,12 +124,13 @@ export function AuthContextProvider(props: AuthContextProviderProps) {
         const { uid, email, displayName } = userAuth;
 
         const token = await userAuth.getIdToken(true);
+        const role = await getRole(uid, token);
 
         setUser({
           id: uid,
           displayName: displayName ?? "",
           email: email ?? "",
-          role: "",
+          role: role ?? "",
           idToken: token,
           disabled: false,
         });

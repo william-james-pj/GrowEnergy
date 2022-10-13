@@ -14,6 +14,7 @@ import { IconColorMode } from "../../../components/IconColorMode";
 import LogOutSvg from "../../../assets/svg/LogOut.svg";
 import HomeMenuSvg from "../../../assets/svg/HomeMenu.svg";
 import UsersMenuSvg from "../../../assets/svg/UsersMenu.svg";
+import UsersSvg from "../../../assets/svg/User.svg";
 
 import { useAuth } from "../../../hooks/useAuth";
 
@@ -53,7 +54,9 @@ export function CustomDrawerContent(props: DrawerContentComponentProps) {
       <S.ViewHeader>
         <S.ViewUserRow>
           <S.ViewUserInfo>
-            <S.ViewUserImgBox></S.ViewUserImgBox>
+            <S.ViewUserImgBox>
+              <UsersSvg fill={theme.colors.background} />
+            </S.ViewUserImgBox>
             <S.TextUserName>{getName()}</S.TextUserName>
           </S.ViewUserInfo>
           <IconColorMode />
@@ -77,24 +80,25 @@ export function CustomDrawerContent(props: DrawerContentComponentProps) {
               <S.TextRouterName isActive={focused}>Home</S.TextRouterName>
             )}
           />
-
-          <DrawerItem
-            style={styles.drawerItem}
-            activeBackgroundColor={theme.colors.primaryOpacity}
-            inactiveBackgroundColor={theme.colors.background}
-            focused={routerName[props.state.index] === "UsersStack"}
-            onPress={() => props.navigation.navigate("UsersStack")}
-            icon={({ focused }) => (
-              <S.ViewIconMenu>
-                <UsersMenuSvg
-                  fill={focused ? theme.colors.text : theme.colors.disabled}
-                />
-              </S.ViewIconMenu>
-            )}
-            label={({ focused }) => (
-              <S.TextRouterName isActive={focused}>Usuários</S.TextRouterName>
-            )}
-          />
+          {user?.role === "admin" ? (
+            <DrawerItem
+              style={styles.drawerItem}
+              activeBackgroundColor={theme.colors.primaryOpacity}
+              inactiveBackgroundColor={theme.colors.background}
+              focused={routerName[props.state.index] === "UsersStack"}
+              onPress={() => props.navigation.navigate("UsersStack")}
+              icon={({ focused }) => (
+                <S.ViewIconMenu>
+                  <UsersMenuSvg
+                    fill={focused ? theme.colors.text : theme.colors.disabled}
+                  />
+                </S.ViewIconMenu>
+              )}
+              label={({ focused }) => (
+                <S.TextRouterName isActive={focused}>Usuários</S.TextRouterName>
+              )}
+            />
+          ) : null}
         </S.ViewContent>
       </S.ViewHeader>
 

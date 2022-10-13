@@ -35,6 +35,9 @@ export const ViewUserImgBox = styled.View`
   height: 50px;
   border-radius: 25px;
   background-color: ${(props) => props.theme.colors.disabled};
+
+  align-items: center;
+  justify-content: center;
 `;
 
 export const TextUserName = styled.Text`
