@@ -41,7 +41,6 @@ export function SeeCondominium() {
         <S.TextSectionTitle>Overview</S.TextSectionTitle>
         <S.ViewRow>
           <SeeConOverviewBox title={"Geração total"} value={20.14} />
-          <SeeConOverviewBox title={"Consumo total"} value={15.14} isSecudary />
         </S.ViewRow>
 
         <S.TextSectionTitle>Dispositivios</S.TextSectionTitle>

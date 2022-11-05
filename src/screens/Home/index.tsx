@@ -21,11 +21,6 @@ export function Home() {
             valueToday={8.71}
             valueMonth={90.87}
           />
-          <CardOverview
-            title={"Consumo total"}
-            valueToday={5.32}
-            valueMonth={70.53}
-          />
         </S.ViewOverviewRow>
       </SafeAreaView>
     </S.ViewWrapper>

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ChartBox } from "../../components/ChartBox";
-import { TwoLineChart } from "../../components/Charts/TwoLineChart";
+import { OneLineChart } from "../../components/Charts/OneLineChart";
 
 import { DateSelector } from "../../components/DateSelector";
 import { Header } from "../../components/Header";
@@ -64,22 +64,16 @@ export function Dashboard() {
             title="Geração solar"
             date="Mês atual"
             isCompleteInfo
+            isOneInfo
             firstInfo={{
               title: "Geração total",
               value: "80,45",
               maxValue: "48",
               minValue: "40",
             }}
-            secondInfo={{
-              title: "Consumo total",
-              value: "60,18",
-              maxValue: "38",
-              minValue: "30",
-            }}
           >
-            <TwoLineChart
-              firstValues={[43, 40, 48, 41, 43, 48]}
-              secundaryValues={[30, 32, 33, 30, 38, 33]}
+            <OneLineChart
+              values={[43, 40, 48, 41, 43, 48]}
               labelsX={["1", "7", "14", "21", "28", "31"]}
             />
           </ChartBox>
@@ -88,20 +82,15 @@ export function Dashboard() {
             title="Geração solar"
             date="Últimos meses"
             isCompleteInfo={false}
+            isOneInfo
             firstInfo={{
               title: "Geração total (kW)",
               maxValue: "580",
               minValue: "520",
             }}
-            secondInfo={{
-              title: "Consumo total (kW)",
-              maxValue: "520",
-              minValue: "440",
-            }}
           >
-            <TwoLineChart
-              firstValues={[570, 560, 520, 540, 570]}
-              secundaryValues={[460, 440, 480, 460, 490]}
+            <OneLineChart
+              values={[570, 560, 520, 540, 570]}
               labelsX={["Abr", "Maio", "Jun", "Jul", "Ago"]}
             />
           </ChartBox>
