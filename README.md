@@ -32,6 +32,12 @@ A imagem abaixo, representa nosso protótipo de baixa fidelidade.
 
 ![screenshot](.github/baixaFidelidade.png)
 
+### Protótipo de alta fidelidade
+
+O nosso protótipo de alta fidelidade foi construído no [Figma](http://figma.com/).
+
+  * [Protótipo de alta fidelidade](https://www.figma.com/file/nDTYd4xtBrNfxowenXd45r/UPX6?node-id=0%3A1)
+
 ### Construído com
 
 O projeto foi construído utilizando:
