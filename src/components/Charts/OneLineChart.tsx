@@ -20,7 +20,11 @@ export function OneLineChart({ values, labelsX }: OneLineChartProps) {
   };
 
   const minValue = () => {
-    return getMinNumber(values);
+    let min = getMinNumber(values);
+
+    if (min >= 0) return min;
+
+    return 0;
   };
 
   const chartConfig = {

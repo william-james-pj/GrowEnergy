@@ -50,10 +50,23 @@ type NewUserType = {
   disabled: boolean;
 };
 
+type GenerationByMonthType = { generation: number; month: number };
+
 type CondominiumsType = {
   id: string;
+  name: string;
+  address: string;
+  stations: DevicesType[];
 };
 
 type DevicesType = {
   id: string;
+  name: string;
+  condominium: string;
+};
+
+type GenerationType = {
+  power: string;
+  station: string;
+  time: Date;
 };

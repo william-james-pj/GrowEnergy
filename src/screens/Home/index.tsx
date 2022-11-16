@@ -1,13 +1,27 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { GenerationType } from "../../@types/types";
 
 import { Header } from "../../components/Header";
+import { useCondominium } from "../../hooks/useCondominium";
 import { BoxEnergySaving } from "./components/BoxEnergySaving";
 import { CardOverview } from "./components/CardOverview";
 
 import * as S from "./styles";
 
 export function Home() {
+  const { get, generationDay, generationMonth } = useCondominium();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await get();
+    };
+
+    fetchData().catch(console.error);
+
+    return () => {};
+  }, []);
+
   return (
     <S.ViewWrapper>
       <SafeAreaView>
@@ -18,8 +32,8 @@ export function Home() {
         <S.ViewOverviewRow>
           <CardOverview
             title={"Geração total"}
-            valueToday={8.71}
-            valueMonth={90.87}
+            valueToday={generationDay}
+            valueMonth={generationMonth}
           />
         </S.ViewOverviewRow>
       </SafeAreaView>

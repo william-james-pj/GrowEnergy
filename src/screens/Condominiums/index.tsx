@@ -5,6 +5,7 @@ import { FlatList } from "react-native";
 import { CondominiumsType } from "../../@types/types";
 
 import { useDarkMode } from "../../hooks/userDarkMode";
+import { useCondominium } from "../../hooks/useCondominium";
 
 import { Header } from "../../components/Header";
 import { CardCondominiums } from "./components/CardCondominiums";
@@ -15,12 +16,12 @@ import * as S from "./styles";
 
 export function Condominiums() {
   const { theme } = useDarkMode();
-  const data: CondominiumsType[] = [{ id: "1" }, { id: "2" }];
+  const { condominiums } = useCondominium();
 
   const flatList = useRef<FlatList<CondominiumsType>>(null);
 
   const renderRows = ({ item }: { item: CondominiumsType }) => {
-    return <CardCondominiums />;
+    return <CardCondominiums condominium={item} />;
   };
 
   const listEmpty = () => {
@@ -42,7 +43,7 @@ export function Condominiums() {
           removeClippedSubviews={false}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingBottom: 25 }}
-          data={data}
+          data={condominiums}
           renderItem={renderRows}
           keyExtractor={(item) => item.id}
           ItemSeparatorComponent={() => <S.Separator></S.Separator>}
