@@ -4,7 +4,7 @@
   <h3 align="center">Grow Energy</h3>
 
   <p align="center">
-    App para gerenciar sua geração de energia solar
+    Integração e Exibição das Informações em Painéis Solares de Diferentes Condomínios
   </p>
 </p>
 
@@ -15,10 +15,10 @@
       <a href="#sobre-o-projeto">Sobre o projeto</a>
       <ul>
         <li><a href="#protótipo-de-baixa-fidelidade">Protótipo de baixa fidelidade</a></li>
-        <li><a href="#construido-com">Construido com</a></li>
+        <li><a href="#construído-com">Construido com</a></li>
       </ul>
     </li>
-    <li><a href="#contato">Contato</a></li>
+    <li><a href="#grupo">Grupo</a></li>
   </ol>
 </details>
 
@@ -46,8 +46,14 @@ O projeto foi construído utilizando:
 - [Firebase](https://firebase.google.com/)
 - [TypeScript](https://www.typescriptlang.org)
 
-## Contato
+## Grupo
 
-William James - william.james.pj@gmail.com
+* Beatriz Tiemi Hashimoto - RA: 200238
+* Guilherme Alarcon de Campos - RA: 200228
+* Gustavo Tomoyuki Nozue - RA: 200211
+* Henrique de Resende Arantes - RA: 200206
+* Thiago Fernando Rodrigues - RA: 200126
+* Thiago José Rodrigues Pires - RA: 200569
+* William James P. Júnior - RA: 200887
 
 Link do projeto: [https://github.com/william-james-pj/growEnergy](https://github.com/william-james-pj/growEnergy)
