@@ -1,5 +1,6 @@
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { monthName } from "./monthName";
 
 export type FirstAndLastDayType = {
   first: Date;
@@ -26,12 +27,11 @@ export const getLastMonth = (
   currentDate: Date,
   numberOFMonth: number
 ): string[] => {
-  let currentMonth = currentDate.getMonth();
   let months: string[] = [];
 
   for (let i = numberOFMonth - 1; i >= 0; i--) {
-    let monthAux = currentDate;
-    monthAux.setMonth(currentMonth - i);
+    let monthAux = new Date(currentDate);
+    monthAux.setMonth(monthAux.getMonth() - i);
     months.push(format(monthAux, "MMM", { locale: ptBR }));
   }
 
@@ -42,12 +42,11 @@ export const getFirstAndLastDayOfLastMonth = (
   currentDate: Date,
   numberOFMonth: number
 ): FirstAndLastDayType[] => {
-  let currentMonth = currentDate.getMonth();
   let days: FirstAndLastDayType[] = [];
 
   for (let i = numberOFMonth - 1; i >= 0; i--) {
-    let monthAux = currentDate;
-    monthAux.setMonth(currentMonth - i);
+    let monthAux = new Date(currentDate);
+    monthAux.setMonth(monthAux.getMonth() - i);
     days.push(getFirstAndLastDayOfMonth(monthAux));
   }
 
@@ -56,9 +55,9 @@ export const getFirstAndLastDayOfLastMonth = (
 
 export const getFirstAndLastDayOfMonth = (date: Date): FirstAndLastDayType => {
   const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
-  firstDay.setHours(1);
+  // firstDay.setHours(1);
   const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
-  // lastDay.setHours(22);
+  lastDay.setHours(22);
 
   return {
     first: firstDay,

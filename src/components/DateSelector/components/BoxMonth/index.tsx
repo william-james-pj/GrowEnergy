@@ -40,8 +40,6 @@ export function BoxMonths({
 
   const onChangeMonth = (value: number) => {
     let newDate = new Date(yearSelected, value, 1);
-    setDateSelected(`${getMonthLongName(newDate)}, ${yearSelected}`);
-    setMonthSelected(value);
     onChange(newDate);
   };
 
@@ -67,7 +65,7 @@ export function BoxMonths({
           >
             <ArrowLeftSVG fill={theme.colors.disabled} />
           </TouchableHighlight>
-          <S.TextYear>2022</S.TextYear>
+          <S.TextYear>{yearSelected}</S.TextYear>
           <TouchableHighlight
             style={{ padding: 4, borderRadius: 4 }}
             underlayColor="rgba(0,0,0,0.2)"

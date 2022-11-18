@@ -50,7 +50,11 @@ type NewUserType = {
   disabled: boolean;
 };
 
-type GenerationByMonthType = { generation: number; month: number };
+type GenerationByMonthType = {
+  generation: number;
+  month: number;
+  year: number;
+};
 
 type CondominiumsType = {
   id: string;

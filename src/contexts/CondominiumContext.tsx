@@ -17,19 +17,29 @@ import {
 import {
   FirstAndLastDayType,
   getFirstAndLastDayOfLastMonth,
+  getFirstAndLastDayOfMonth,
 } from "../utils/dateFunctions";
 
 type CondominiumContextType = {
   get: () => Promise<void>;
   condominiums: CondominiumsType[];
+  getStationsById: (id: string) => Promise<DevicesType[]>;
   generationThisMonth: GenerationType[];
   generationDay: number;
   generationMonth: number;
+  getGenerationsByDays: (
+    currentDate: Date,
+    stations: DevicesType[]
+  ) => Promise<number[]>;
   getGenerationsByLastMonths: (
     currentDate: Date,
     numberOFMonth: number,
     stations: DevicesType[]
   ) => Promise<number[]>;
+  getAllGenerationsByMonth: (
+    stations: string[],
+    date: FirstAndLastDayType
+  ) => Promise<GenerationByMonthType>;
 };
 
 type CondominiumContextProviderProps = {
@@ -114,6 +124,26 @@ export function CondominiumContextProvider(
     return aux;
   };
 
+  const getStationsById = async (id: string): Promise<DevicesType[]> => {
+    let aux: DevicesType[] = [];
+    const q = query(
+      collection(firestore, "stations"),
+      where("condominium", "==", id)
+    );
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      let data = doc.data();
+      let newStation: DevicesType = {
+        id: doc.id,
+        condominium: data.condominium,
+        name: data.name,
+      };
+      aux.push(newStation);
+    });
+
+    return aux;
+  };
+
   const getGenerationsByThisMonth = async (
     allCondominiums: CondominiumsType[]
   ): Promise<GenerationType[]> => {
@@ -153,6 +183,71 @@ export function CondominiumContextProvider(
     return aux;
   };
 
+  const getGenerationsByDays = async (
+    currentDate: Date,
+    stations: DevicesType[]
+  ): Promise<number[]> => {
+    let stationIds = stations.map((e) => e.id);
+
+    if (stationIds === undefined) return [];
+    const firstAndLastDay = getFirstAndLastDayOfMonth(currentDate);
+
+    let generationAux: GenerationType[] = [];
+
+    await Promise.all(
+      stations.map(async (station) => {
+        const q = query(
+          collection(firestore, "values"),
+          where("time", ">=", firstAndLastDay.first),
+          where("time", "<=", firstAndLastDay.lastDay),
+          where("station", "==", station.id)
+        );
+
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach((doc) => {
+          let data = doc.data();
+          let newGeneration: GenerationType = {
+            power: data.power,
+            station: data.station,
+            time: data.time.toDate(),
+          };
+          generationAux.push(newGeneration);
+        });
+      })
+    );
+
+    if (generationAux.length === 0) return [];
+
+    let aux: number[] = [];
+
+    aux.push(reduceArrayByDay(generationAux, 1));
+    aux.push(reduceArrayByDay(generationAux, 7));
+    aux.push(reduceArrayByDay(generationAux, 14));
+    aux.push(reduceArrayByDay(generationAux, 21));
+    aux.push(reduceArrayByDay(generationAux, 28));
+    aux.push(
+      reduceArrayByDay(generationAux, firstAndLastDay.lastDay.getDate())
+    );
+
+    return aux;
+  };
+
+  const reduceArrayByDay = (data: GenerationType[], day: number): number => {
+    let days = data.filter((e) => e.time.getDate() === day);
+
+    if (days.length === 0) return 0;
+
+    let dayValues = days.map((e) => Number(e.power));
+
+    if (dayValues.length === 0) return 0;
+
+    if (dayValues.length === 1) return dayValues[0];
+
+    let all = dayValues.reduce((a, b) => a + b);
+    console.log(all, day);
+    return all;
+  };
+
   const getGenerationsByLastMonths = async (
     currentDate: Date,
     numberOFMonth: number,
@@ -172,7 +267,7 @@ export function CondominiumContextProvider(
       })
     );
 
-    generationAux.sort((a, b) => a.month - b.month);
+    generationAux.sort((a, b) => a.year - b.year || a.month - b.month);
 
     let values = generationAux.map((e) => e.generation);
 
@@ -203,14 +298,26 @@ export function CondominiumContextProvider(
     );
 
     if (generationAux.length === 0)
-      return { generation: 0, month: date.first.getMonth() };
+      return {
+        generation: 0,
+        month: date.first.getMonth(),
+        year: date.first.getFullYear(),
+      };
 
     if (generationAux.length === 1)
-      return { generation: generationAux[0], month: date.first.getMonth() };
+      return {
+        generation: generationAux[0],
+        month: date.first.getMonth(),
+        year: date.first.getFullYear(),
+      };
 
     let generation = generationAux.reduce((a, b) => a + b);
 
-    return { generation, month: date.first.getMonth() };
+    return {
+      generation,
+      month: date.first.getMonth(),
+      year: date.first.getFullYear(),
+    };
   };
 
   return (
@@ -218,10 +325,13 @@ export function CondominiumContextProvider(
       value={{
         get,
         condominiums,
+        getStationsById,
         generationThisMonth,
         generationDay,
         generationMonth,
+        getGenerationsByDays,
         getGenerationsByLastMonths,
+        getAllGenerationsByMonth,
       }}
     >
       {props.children}
