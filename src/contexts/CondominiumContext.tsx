@@ -244,7 +244,7 @@ export function CondominiumContextProvider(
     if (dayValues.length === 1) return dayValues[0];
 
     let all = dayValues.reduce((a, b) => a + b);
-    console.log(all, day);
+
     return all;
   };
 

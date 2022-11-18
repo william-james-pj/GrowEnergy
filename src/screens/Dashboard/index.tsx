@@ -3,6 +3,7 @@ import { ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ChartBox } from "../../components/ChartBox";
 import { OneLineChart } from "../../components/Charts/OneLineChart";
+import { LoadingChart } from "../../components/LoadingChart";
 
 import { useCondominium } from "../../hooks/useCondominium";
 
@@ -57,7 +58,10 @@ export function Dashboard() {
   const [maxSecondChart, setMaxSecondChart] = useState(0);
   const [minSecondChart, setMinSecondChart] = useState(0);
 
-  const changeDate = (date: Date) => {
+  const [loadingFirstChart, setLoadingFirstChart] = useState(true);
+  const [loadingSecondChart, setLoadingSecondChart] = useState(true);
+
+  const changeDate = async (date: Date) => {
     date.setFullYear(2022);
     setDateSelected(date);
     getDataFirstChart(undefined, date);
@@ -67,11 +71,11 @@ export function Dashboard() {
   const changeLocation = (value: DropdownDataType) => {
     setLocationSelected(value);
     if (value.value === "all") {
-      getDataSecondChart(undefined, undefined);
-      getDataFirstChart(undefined, undefined);
+      getDataSecondChart(undefined, dateSelected);
+      getDataFirstChart(undefined, dateSelected);
     } else {
-      getDataSecondChart(value.id, undefined);
-      getDataFirstChart(value.id, undefined);
+      getDataSecondChart(value.id, dateSelected);
+      getDataFirstChart(value.id, dateSelected);
     }
   };
 
@@ -103,10 +107,19 @@ export function Dashboard() {
     setDropdownData(datas);
   };
 
+  const defaultFirstChartValue = () => {
+    setMaxFirstChart(0);
+    setMinFirstChart(0);
+    setTotalFirstChart(0);
+    setValuesFirstChart(startFirstValues);
+  };
+
   const getDataFirstChart = async (
     locationChange: string | undefined,
     dateChange: Date | undefined
   ) => {
+    setLoadingFirstChart(true);
+    defaultFirstChartValue();
     let stations: DevicesType[] = [];
     let currentDate: Date = new Date();
 
@@ -136,28 +149,18 @@ export function Dashboard() {
     }
 
     if (stations.length === 0) {
-      setMaxFirstChart(0);
-      setMinFirstChart(0);
-      setValuesFirstChart(startFirstValues);
+      defaultFirstChartValue();
+      setLoadingFirstChart(false);
       return;
     }
 
     let generations = await getGenerationsByDays(currentDate, stations);
 
     if (generations.length === 0) {
-      setMaxFirstChart(0);
-      setMinFirstChart(0);
-      setValuesFirstChart(startFirstValues);
+      defaultFirstChartValue();
+      setLoadingFirstChart(false);
       return;
     }
-
-    let stationIds = stations.map((e) => e.id);
-
-    let totalGeneration = await getAllGenerationsByMonth(
-      stationIds,
-      firstAndLastDay
-    );
-    setTotalFirstChart(totalGeneration.generation);
 
     let max = Math.max(...generations);
     let min = Math.min(...generations);
@@ -165,12 +168,28 @@ export function Dashboard() {
     setMaxFirstChart(max);
     setMinFirstChart(min);
     setValuesFirstChart(generations);
+
+    let stationIds = stations.map((e) => e.id);
+    let totalGeneration = await getAllGenerationsByMonth(
+      stationIds,
+      firstAndLastDay
+    );
+    setTotalFirstChart(totalGeneration.generation);
+    setLoadingFirstChart(false);
+  };
+
+  const defaultSecondChartValue = () => {
+    setMaxSecondChart(0);
+    setMinSecondChart(0);
+    setValuesSecondChart(startValues);
   };
 
   const getDataSecondChart = async (
     locationChange: string | undefined,
     dateChange: Date | undefined
   ) => {
+    setLoadingSecondChart(true);
+    defaultSecondChartValue();
     let stations: DevicesType[] = [];
     let currentDate: Date = new Date();
 
@@ -193,9 +212,8 @@ export function Dashboard() {
     }
 
     if (stations.length === 0) {
-      setMaxSecondChart(0);
-      setMinSecondChart(0);
-      setValuesSecondChart(startValues);
+      defaultSecondChartValue();
+      setLoadingSecondChart(false);
       return;
     }
 
@@ -211,13 +229,16 @@ export function Dashboard() {
     setMaxSecondChart(max);
     setMinSecondChart(min);
     setValuesSecondChart(lastGeneration);
+    setLoadingSecondChart(false);
   };
 
   useEffect(() => {
     const fetchData = async () => {
       getCondominiumsName();
-      await getDataFirstChart(undefined, undefined);
-      await getDataSecondChart(undefined, undefined);
+      await Promise.all([
+        getDataFirstChart(undefined, undefined),
+        getDataSecondChart(undefined, undefined),
+      ]);
     };
 
     fetchData().catch(console.error);
@@ -260,7 +281,14 @@ export function Dashboard() {
               minValue: `${minFirstChart.toFixed(2)}`,
             }}
           >
-            <OneLineChart values={valuesFirstChart} labelsX={labelFirstChart} />
+            {loadingFirstChart || loadingSecondChart ? (
+              <LoadingChart />
+            ) : (
+              <OneLineChart
+                values={valuesFirstChart}
+                labelsX={labelFirstChart}
+              />
+            )}
           </ChartBox>
           <S.ViewSeparator />
           <ChartBox
@@ -274,10 +302,14 @@ export function Dashboard() {
               minValue: `${minSecondChart.toFixed(2)}`,
             }}
           >
-            <OneLineChart
-              values={valuesSecondChart}
-              labelsX={labelSecondChart}
-            />
+            {loadingFirstChart || loadingSecondChart ? (
+              <LoadingChart />
+            ) : (
+              <OneLineChart
+                values={valuesSecondChart}
+                labelsX={labelSecondChart}
+              />
+            )}
           </ChartBox>
           <S.ViewFooter />
         </ScrollView>

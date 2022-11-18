@@ -6,6 +6,7 @@ import { useDarkMode } from "../../hooks/userDarkMode";
 import { useCondominium } from "../../hooks/useCondominium";
 import { useCondominiumSelected } from "../../hooks/useCondominiumSelected";
 
+import { LoadingChart } from "../../components/LoadingChart";
 import { Header } from "../../components/Header";
 import { GenerationCard } from "./components/GenerationCard";
 import { ChartBox } from "../../components/ChartBox";
@@ -42,6 +43,9 @@ export function SeeDevice() {
   const [maxSecondChart, setMaxSecondChart] = useState(0);
   const [minSecondChart, setMinSecondChart] = useState(0);
 
+  const [loadingFirstChart, setLoadingFirstChart] = useState(true);
+  const [loadingSecondChart, setLoadingSecondChart] = useState(true);
+
   const getGenerations = () => {
     if (stationSelected === undefined) return;
 
@@ -57,7 +61,11 @@ export function SeeDevice() {
   };
 
   const getDataFirstChart = () => {
-    if (stationSelected === undefined) return;
+    setLoadingFirstChart(true);
+    if (stationSelected === undefined) {
+      setLoadingFirstChart(false);
+      return;
+    }
 
     let dayOfWeek = getDayOfWeek(new Date(), 5);
     let lastGeneration = getLastGenerationByDay(
@@ -74,10 +82,15 @@ export function SeeDevice() {
     setMinFirstChart(min);
     setlabelFirstChart(dayOfWeek);
     setValuesFirstChart(lastGeneration);
+    setLoadingFirstChart(false);
   };
 
   const getDataSecondChart = async () => {
-    if (stationSelected === undefined) return;
+    setLoadingSecondChart(true);
+    if (stationSelected === undefined) {
+      setLoadingSecondChart(false);
+      return;
+    }
 
     let lastMonths = getLastMonth(new Date(), 5);
 
@@ -92,13 +105,16 @@ export function SeeDevice() {
     setMinSecondChart(min);
     setlabelSecondChart(lastMonths);
     setValuesSecondChart(lastGeneration);
+    setLoadingSecondChart(false);
   };
 
   useEffect(() => {
     const fetchData = async () => {
-      getGenerations();
-      getDataFirstChart();
-      await getDataSecondChart();
+      await Promise.all([
+        getGenerations(),
+        getDataFirstChart(),
+        getDataSecondChart(),
+      ]);
     };
 
     fetchData().catch(console.error);
@@ -129,12 +145,16 @@ export function SeeDevice() {
             isCompleteInfo={false}
             isOneInfo
             firstInfo={{
-              title: "Geração total",
+              title: "Geração total (kW)",
               maxValue: `${maxFirstChart}`,
               minValue: `${minFirstChart}`,
             }}
           >
-            <BarsChart values={valuesFirstChart} labelsX={labelFirstChart} />
+            {loadingFirstChart || loadingSecondChart ? (
+              <LoadingChart />
+            ) : (
+              <BarsChart values={valuesFirstChart} labelsX={labelFirstChart} />
+            )}
           </ChartBox>
           <S.ViewSeparator />
           <ChartBox
@@ -143,15 +163,19 @@ export function SeeDevice() {
             isCompleteInfo={false}
             isOneInfo
             firstInfo={{
-              title: "Geração total",
+              title: "Geração total (kW)",
               maxValue: `${maxSecondChart}`,
               minValue: `${minSecondChart}`,
             }}
           >
-            <OneLineChart
-              values={valuesSecondChart}
-              labelsX={labelSecondChart}
-            />
+            {loadingFirstChart || loadingSecondChart ? (
+              <LoadingChart />
+            ) : (
+              <OneLineChart
+                values={valuesSecondChart}
+                labelsX={labelSecondChart}
+              />
+            )}
           </ChartBox>
           <S.ViewFooter />
         </ScrollView>
