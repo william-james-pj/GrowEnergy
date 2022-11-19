@@ -23,6 +23,14 @@ export const getDayOfWeek = (
   return dayOfWeek;
 };
 
+export const getMonthName = (currentDate: Date): String => {
+  return format(currentDate, "MMM", { locale: ptBR });
+};
+
+export const getFullMonthName = (currentDate: Date): String => {
+  return format(currentDate, "MMMM", { locale: ptBR });
+};
+
 export const getLastMonth = (
   currentDate: Date,
   numberOFMonth: number

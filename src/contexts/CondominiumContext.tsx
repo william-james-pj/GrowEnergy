@@ -40,6 +40,7 @@ type CondominiumContextType = {
     stations: string[],
     date: FirstAndLastDayType
   ) => Promise<GenerationByMonthType>;
+  getAllGenerationsByYear: (stations: string[], date: Date) => Promise<number>;
 };
 
 type CondominiumContextProviderProps = {
@@ -320,6 +321,42 @@ export function CondominiumContextProvider(
     };
   };
 
+  const getAllGenerationsByYear = async (
+    stations: string[],
+    date: Date
+  ): Promise<number> => {
+    let generationAux: number[] = [];
+
+    const currentYear = date.getFullYear();
+    const firstDay = new Date(currentYear, 0, 1);
+    const lastDay = new Date(currentYear, 11, 31);
+
+    await Promise.all(
+      stations.map(async (id) => {
+        const q = query(
+          collection(firestore, "values"),
+          where("time", ">=", firstDay),
+          where("time", "<=", lastDay),
+          where("station", "==", id)
+        );
+
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach((doc) => {
+          let data = doc.data();
+          generationAux.push(Number(data.power));
+        });
+      })
+    );
+
+    if (generationAux.length === 0) return 0;
+
+    if (generationAux.length === 1) return generationAux[0];
+
+    let generation = generationAux.reduce((a, b) => a + b);
+
+    return generation;
+  };
+
   return (
     <CondominiumContext.Provider
       value={{
@@ -332,6 +369,7 @@ export function CondominiumContextProvider(
         getGenerationsByDays,
         getGenerationsByLastMonths,
         getAllGenerationsByMonth,
+        getAllGenerationsByYear,
       }}
     >
       {props.children}

@@ -11,11 +11,20 @@ import { useDarkMode } from "../../../../hooks/userDarkMode";
 
 import { HomeNavigationProp } from "../../../../@types/types";
 
+import { getFullMonthName } from "../../../../utils/dateFunctions";
+import { useCondominium } from "../../../../hooks/useCondominium";
+import { energyTax } from "../../../../constants/energyTax";
+
 import * as S from "./styles";
 
 export function BoxEnergySaving() {
   const { theme } = useDarkMode();
   const navigation = useNavigation<HomeNavigationProp>();
+  const { generationMonth } = useCondominium();
+
+  const getCurrentMonthGeneration = () => {
+    return (generationMonth * energyTax).toFixed(2);
+  };
 
   const styles = StyleSheet.create({
     button: {
@@ -44,7 +53,7 @@ export function BoxEnergySaving() {
           </S.TextTitle>
           <S.ViewValueRow>
             <S.TextCurrency>R$</S.TextCurrency>
-            <S.TextValue>220,80</S.TextValue>
+            <S.TextValue>{getCurrentMonthGeneration()}</S.TextValue>
           </S.ViewValueRow>
         </S.ViewText>
 
@@ -54,7 +63,9 @@ export function BoxEnergySaving() {
       </S.ViewHeader>
 
       <S.ViewFooter>
-        <S.TextDate>Agosto - 2022</S.TextDate>
+        <S.TextDate>{`${getFullMonthName(
+          new Date()
+        )} - ${new Date().getFullYear()}`}</S.TextDate>
         <S.ViewDetailsRow>
           <S.TextDetails>Ver mais de detalhes</S.TextDetails>
           <ArrowRightSvg fill={theme.colors.text} />
