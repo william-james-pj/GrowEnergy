@@ -7,14 +7,15 @@ import { Logout } from "./logout";
 import { DrawerNavigator } from "./logged/DrawerNavigator";
 
 import { useAuth } from "../hooks/useAuth";
+import { Loading } from "../components/Loading";
 
 export function Routes() {
-  const { user } = useAuth();
+  const { user, isLoading } = useAuth();
 
   return (
     <View style={{ flex: 1 }}>
       <NavigationContainer>
-        {!user?.id ? <Logout /> : <DrawerNavigator />}
+        {isLoading ? <Loading /> : !user?.id ? <Logout /> : <DrawerNavigator />}
       </NavigationContainer>
     </View>
   );
