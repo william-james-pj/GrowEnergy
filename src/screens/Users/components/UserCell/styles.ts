@@ -27,7 +27,7 @@ export const TextEmail = styled.Text`
   color: ${(props) => props.theme.colors.disabled};
   font-size: ${fonts.size.xxs};
   font-family: ${fonts.type.text400};
-  flex: 2;
+  flex: 2.5;
 `;
 
 export const ViewRule = styled.View`

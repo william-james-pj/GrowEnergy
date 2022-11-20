@@ -40,13 +40,13 @@ export function UserCell({ user }: UserCellProps) {
         </S.ViewRuleBox>
       </S.ViewRule>
 
-      <S.ViewStatus>
+      {/* <S.ViewStatus>
         <S.ViewStatusBox active={!user.disabled}>
           <S.TextStatusBoxText active={!user.disabled}>
             {!user.disabled ? "Ativo" : "Inativo"}
           </S.TextStatusBoxText>
         </S.ViewStatusBox>
-      </S.ViewStatus>
+      </S.ViewStatus> */}
 
       <S.ViewOptions>
         <RectButton style={styles.button} onPress={updateUser}>

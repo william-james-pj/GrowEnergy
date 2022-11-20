@@ -1,7 +1,7 @@
 import React, { createContext, ReactNode, useState, useEffect } from "react";
 
 import { firestore } from "../services/firebase";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, getDocs, query, where, addDoc } from "firebase/firestore";
 
 import { useAuth } from "../hooks/useAuth";
 import {
@@ -9,6 +9,7 @@ import {
   DevicesType,
   GenerationByMonthType,
   GenerationType,
+  UserAccessType,
 } from "../@types/types";
 import {
   getAllGenerationDay,
@@ -22,6 +23,10 @@ import {
 
 type CondominiumContextType = {
   get: () => Promise<void>;
+  getAllCondominium: () => Promise<CondominiumsType[]>;
+  getUserCondominium: (
+    userId: string | undefined
+  ) => Promise<CondominiumsType[]>;
   condominiums: CondominiumsType[];
   getStationsById: (id: string) => Promise<DevicesType[]>;
   generationThisMonth: GenerationType[];
@@ -41,6 +46,10 @@ type CondominiumContextType = {
     date: FirstAndLastDayType
   ) => Promise<GenerationByMonthType>;
   getAllGenerationsByYear: (stations: string[], date: Date) => Promise<number>;
+  addCondominiumAccess: (
+    condominiumId: string,
+    userId: string
+  ) => Promise<boolean>;
 };
 
 type CondominiumContextProviderProps = {
@@ -61,12 +70,43 @@ export function CondominiumContextProvider(
   const [generationDay, setGenerationDay] = useState<number>(0);
   const [generationMonth, setGenerationMonth] = useState<number>(0);
 
+  const addCondominiumAccess = async (
+    condominiumId: string,
+    userId: string
+  ): Promise<boolean> => {
+    const docRef = collection(firestore, "userAccess");
+
+    let condominium = await getUserCondominium(userId);
+
+    let aux: CondominiumsType[] = [];
+    condominium.forEach((e) => {
+      console.log(e.id, condominiumId);
+      if (e.id === condominiumId) {
+        aux.push(e);
+      }
+    });
+
+    if (aux.length !== 0) return false;
+
+    let newObj: UserAccessType = {
+      condominium: condominiumId,
+      user: userId,
+    };
+
+    await addDoc(docRef, newObj);
+
+    return true;
+  };
+
   const get = async () => {
     let condominiumsAux: CondominiumsType[] = [];
     if (user?.role === "admin") {
       condominiumsAux = await getAllCondominium();
     } else {
+      condominiumsAux = await getUserCondominium(user?.id);
     }
+
+    if (condominiumsAux.length === 0) return;
 
     condominiumsAux = await getStations(condominiumsAux);
 
@@ -89,6 +129,44 @@ export function CondominiumContextProvider(
         stations: [],
       });
     });
+    setCondominiums(aux);
+    return aux;
+  };
+
+  const getUserCondominium = async (
+    userId: string | undefined
+  ): Promise<CondominiumsType[]> => {
+    const q = query(
+      collection(firestore, "userAccess"),
+      where("user", "==", userId === undefined ? user?.id! : userId)
+    );
+
+    let condominiumIds: string[] = [];
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      let data = doc.data();
+      condominiumIds.push(data.condominium);
+    });
+
+    let aux: CondominiumsType[] = [];
+    await Promise.all(
+      condominiumIds.map(async (id) => {
+        const q = query(
+          collection(firestore, "condominiums"),
+          where("id", "==", id)
+        );
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach((doc) => {
+          let data = doc.data();
+          aux.push({
+            id: doc.id,
+            address: data.address,
+            name: data.name,
+            stations: [],
+          });
+        });
+      })
+    );
     setCondominiums(aux);
     return aux;
   };
@@ -361,6 +439,8 @@ export function CondominiumContextProvider(
     <CondominiumContext.Provider
       value={{
         get,
+        getAllCondominium,
+        getUserCondominium,
         condominiums,
         getStationsById,
         generationThisMonth,
@@ -370,6 +450,7 @@ export function CondominiumContextProvider(
         getGenerationsByLastMonths,
         getAllGenerationsByMonth,
         getAllGenerationsByYear,
+        addCondominiumAccess,
       }}
     >
       {props.children}

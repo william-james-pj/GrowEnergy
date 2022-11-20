@@ -74,3 +74,8 @@ type GenerationType = {
   station: string;
   time: Date;
 };
+
+type UserAccessType = {
+  condominium: string;
+  user: string;
+};
