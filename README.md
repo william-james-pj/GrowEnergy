@@ -86,6 +86,10 @@ Para obter uma cópia local desse repositório, siga estas etapas.
 
   Esse projeto necessita da utilização do Firebase, pois utiliza as funcionalidades do Authentication, do Cloud Firestore e das Functions.
 
+- Node e NPM
+
+  É necessário ter instalado o [Node.js](https://nodejs.org/en/), que vem acompanhado do NPM.
+
 - yarn
 
   Baixe e instale a versão mais recente do [yarn](https://classic.yarnpkg.com/en/docs/install/).
@@ -101,6 +105,28 @@ Para obter uma cópia local desse repositório, siga estas etapas.
   ```sh
   choco install yarn
   ```
+
+- Expo
+
+  Para instalar o Expo é bem simples.
+
+  Com o Node e Yarn instalados, abra o terminal e execute:
+
+  ```sh
+  yarn global add expo-cli
+
+  ou
+
+  npm install expo-cli --global
+  ```
+
+  Para verificar se a instalação ocorreu com sucesso, execute:
+
+  ```sh
+  expo --version
+  ```
+
+  Se retornar a versão da cli do Expo, a instalação ocorreu com sucesso
 
 ### Instalação
 
