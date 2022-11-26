@@ -76,6 +76,59 @@ A última funcionalidade está disponível apenas para os usuários admins onde 
   <img src=".github/crud2.jpeg" alt="crud2" width="215"/>
 </p>
 
+## Como Usar
+
+Para obter uma cópia local desse repositório, siga estas etapas.
+
+### Pré-requisitos
+
+- Firebase
+
+  Esse projeto necessita da utilização do Firebase, pois utiliza as funcionalidades do Authentication, do Cloud Firestore e das Functions.
+
+- yarn
+
+  Baixe e instale a versão mais recente do [yarn](https://classic.yarnpkg.com/en/docs/install/).
+
+  Instalar via npm
+
+  ```sh
+  npm install --global yarn
+  ```
+
+  Instalar via Chocolatey
+
+  ```sh
+  choco install yarn
+  ```
+
+### Instalação
+
+1. Clone esse repositório:
+   ```sh
+   git clone https://github.com/william-james-pj/growEnergy.git
+   ```
+2. Na raiz do projeto, instale todas as dependências definidas no package.json:
+   ```sh
+   yarn
+   ```
+3. Também na raiz do projeto crie um arquivo chamado `.env` e adicione as configurações do seu projeto do Firebase:
+
+   ```shell
+   FIREBASE_API_KEY=SEU_FIREBASE_API_KEY
+   FIREBASE_AUTH_DOMAIN=SEU_FIREBASE_AUTH_DOMAIN
+   FIREBASE_DATABASE_URL=SEU_FIREBASE_DATABASE_URL
+   FIREBASE_PROJECT_ID=SEU_FIREBASE_PROJECT_ID
+   FIREBASE_STORAGE_BUCKET=SEU_FIREBASE_STORAGE_BUCKET
+   FIREBASE_MESSAGING_SENDER_ID=SEUFIREBASE_MESSAGING_SENDER_ID
+   FIREBASE_APP_ID=SEU_FIREBASE_APP_ID
+   ```
+
+4. Inicie o projeto:
+   ```sh
+   yarn start
+   ```
+
 ## Grupo
 
 - Beatriz Tiemi Hashimoto - RA: 200238
