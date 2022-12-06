@@ -11,7 +11,7 @@ export function UserHeader() {
 
       <S.TextRule>Rule</S.TextRule>
 
-      <S.TextStatus>Status</S.TextStatus>
+      {/* <S.TextStatus>Status</S.TextStatus> */}
 
       <S.ViewOptions></S.ViewOptions>
     </S.ViewWrapper>

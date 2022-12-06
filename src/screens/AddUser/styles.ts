@@ -88,7 +88,9 @@ export const TextIsAdmin = styled.Text`
   margin-top: 16px;
 `;
 
-export const ViewCondominium = styled.View``;
+export const ViewCondominium = styled.View`
+  min-height: 90px;
+`;
 
 export const ViewButton = styled.View`
   background: ${(props) => props.theme.colors.text};

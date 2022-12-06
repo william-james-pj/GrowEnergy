@@ -5,6 +5,8 @@ import { ColorModeContext } from "./src/contexts/ColorModeContext";
 import { AuthContextProvider } from "./src/contexts/AuthContext";
 import { UserContextProvider } from "./src/contexts/UserContext";
 import { UserUpdateContextProvider } from "./src/contexts/UserUpdateContext";
+import { CondominiumContextProvider } from "./src/contexts/CondominiumContext";
+import { CondominiumSelectedContextProvider } from "./src/contexts/CondominiumSelectedContext";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 import { Routes } from "./src/routes";
@@ -36,9 +38,13 @@ export default function App() {
       <AuthContextProvider>
         <UserContextProvider>
           <UserUpdateContextProvider>
-            <GestureHandlerRootView style={{ flex: 1 }}>
-              <Routes />
-            </GestureHandlerRootView>
+            <CondominiumContextProvider>
+              <CondominiumSelectedContextProvider>
+                <GestureHandlerRootView style={{ flex: 1 }}>
+                  <Routes />
+                </GestureHandlerRootView>
+              </CondominiumSelectedContextProvider>
+            </CondominiumContextProvider>
           </UserUpdateContextProvider>
         </UserContextProvider>
       </AuthContextProvider>

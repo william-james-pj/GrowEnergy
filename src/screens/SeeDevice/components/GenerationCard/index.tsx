@@ -7,9 +7,12 @@ import TransformerBoltSVG from "../../../../assets/svg/Transformer.svg";
 
 import * as S from "./styles";
 
-type GenerationCardBox = {};
+type GenerationCardBox = {
+  dayliy: number;
+  monthly: number;
+};
 
-export function GenerationCard({}: GenerationCardBox) {
+export function GenerationCard({ dayliy, monthly }: GenerationCardBox) {
   const { theme } = useDarkMode();
 
   return (
@@ -17,7 +20,7 @@ export function GenerationCard({}: GenerationCardBox) {
       <PlugBoltSVG fill={theme.colors.primary} />
       <S.ViewInfoBox>
         <S.TextDate>Hoje</S.TextDate>
-        <S.TextValue>10 kW</S.TextValue>
+        <S.TextValue>{`${dayliy} kW`}</S.TextValue>
       </S.ViewInfoBox>
 
       <S.ViewLine />
@@ -25,7 +28,7 @@ export function GenerationCard({}: GenerationCardBox) {
       <TransformerBoltSVG fill={theme.colors.primary} />
       <S.ViewInfoBox>
         <S.TextDate>Esse mês</S.TextDate>
-        <S.TextValue>700 kW</S.TextValue>
+        <S.TextValue>{`${monthly} kW`}</S.TextValue>
       </S.ViewInfoBox>
     </S.ViewWrapper>
   );

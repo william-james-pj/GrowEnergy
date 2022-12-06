@@ -47,7 +47,7 @@ export function BarsChart({ values, labelsX }: BarChartProps) {
     <BarChart
       data={data}
       width={Math.floor(
-        35 + (values.length * (screenWidth - 64 - 35)) / (values.length - 1)
+        35 + (values.length * (screenWidth - 64 - 35)) / values.length + 1
       )}
       height={150}
       fromNumber={getMaxNumber(values)}

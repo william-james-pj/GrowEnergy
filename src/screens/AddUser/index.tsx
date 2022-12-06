@@ -10,6 +10,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useUser } from "../../hooks/useUser";
 import { useDarkMode } from "../../hooks/userDarkMode";
 import { useUserUpdate } from "../../hooks/useUserUpdate";
+import { useCondominium } from "../../hooks/useCondominium";
 
 import { Header } from "../../components/Header";
 import { TextInput } from "../../components/TextInput";
@@ -19,11 +20,16 @@ import { CondominiumTable } from "./components/CondominiumTable";
 import { ButtonSmall } from "../../components/ButtonSmall";
 import { ConfirmModal } from "../../components/ConfirmModal";
 import { Loading } from "../../components/Loading";
+import { SelectCondominiumModal } from "./components/SelectCondominiumModal";
 
 import { UserRule } from "../../constants/user";
 import { generatePassword } from "../../utils/generatePassword";
 import { emailValidator } from "../../utils/emailValidator";
-import { DrawerScreenProps, NewUserType } from "../../@types/types";
+import {
+  CondominiumsType,
+  DrawerScreenProps,
+  NewUserType,
+} from "../../@types/types";
 
 import RecoverSVG from "../../assets/svg/Recover.svg";
 import EyeSlashSVG from "../../assets/svg/Eye-slash.svg";
@@ -34,10 +40,14 @@ import * as S from "./styles";
 
 export function AddUser() {
   const { theme } = useDarkMode();
+  const { addCondominiumAccess, getUserCondominium } = useCondominium();
   const { isLoading, creatUser, updateUser } = useUser();
   const { getUser, clearUser } = useUserUpdate();
   const navigation = useNavigation<DrawerScreenProps>();
 
+  const [screenTitle, setScreenTitle] = useState("Adicionar Usuário");
+
+  const [userId, setUserId] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("password123");
@@ -48,6 +58,11 @@ export function AddUser() {
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [isAllowedShowPassword, setIsAllowedShowPassword] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
+
+  const [selectModalVisible, setSelectModalVisible] = useState(false);
+  const [accessCondominium, setAccessCondominium] = useState<
+    CondominiumsType[]
+  >([]);
 
   const handleToggleStatus = () => {
     setStatus(!status);
@@ -82,9 +97,13 @@ export function AddUser() {
 
   const handlerButton = async () => {
     if (!isAllowedShowPassword) {
-      // let value = getUser();
-      // if (value !== undefined) await updateUser(value);
-      closeModal();
+      await Promise.all(
+        accessCondominium.map(async (condominium) => {
+          await addCondominiumAccess(condominium.id, userId);
+        })
+      );
+
+      ToastAndroid.show("Usuário atualizado", ToastAndroid.SHORT);
       return;
     }
 
@@ -105,7 +124,14 @@ export function AddUser() {
       disabled: !status,
     };
 
-    await creatUser(newUser);
+    let newUserId = await creatUser(newUser);
+
+    await Promise.all(
+      accessCondominium.map(async (condominium) => {
+        await addCondominiumAccess(condominium.id, newUserId);
+      })
+    );
+
     ToastAndroid.show("Usuário adicionado", ToastAndroid.SHORT);
     closeModal();
   };
@@ -122,6 +148,8 @@ export function AddUser() {
     setPassword("password");
     setRule(value.role === "admin" ? UserRule.admin : UserRule.trustee);
     setStatus(!value.disabled);
+    setUserId(value.id);
+    setScreenTitle("Atualizar Usuário");
 
     setIsAllowedShowPassword(false);
   };
@@ -131,9 +159,44 @@ export function AddUser() {
     navigation.goBack();
   };
 
+  const selectAccessPress = (condominium: CondominiumsType) => {
+    setSelectModalVisible(false);
+    let aux = accessCondominium;
+
+    if (aux.some((e) => e.id === condominium.id)) {
+      return;
+    }
+
+    aux.push(condominium);
+    setAccessCondominium(aux);
+  };
+
+  const removeAccess = (condominium: CondominiumsType) => {
+    let aux = accessCondominium;
+    let newArray = aux.filter((e) => e.id !== condominium.id);
+    setAccessCondominium(newArray);
+  };
+
+  const getAccess = async () => {
+    let value = getUser();
+
+    if (value === null) {
+      return;
+    }
+
+    let condominiums = await getUserCondominium(value.id);
+    setAccessCondominium(condominiums);
+  };
+
   useEffect(() => {
     // passwordReset();
     settingScreen();
+
+    const fetchData = async () => {
+      await getAccess();
+    };
+    fetchData().catch(console.error);
+
     return () => {};
   }, []);
 
@@ -147,7 +210,7 @@ export function AddUser() {
           behavior={Platform.OS === "ios" ? "padding" : "height"}
         >
           <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-            <Header title="Adicionar Usuário" back />
+            <Header title={screenTitle} back />
 
             <S.ViewForm>
               <S.TextInputLabel style={{ marginTop: 0 }}>Nome</S.TextInputLabel>
@@ -222,7 +285,7 @@ export function AddUser() {
                   />
                 </S.ViewRule>
 
-                <S.ViewStatus>
+                {/* <S.ViewStatus>
                   <S.TextInputLabel>Status</S.TextInputLabel>
                   <S.ViewToggleContainer>
                     <ToggleSwitch
@@ -232,7 +295,7 @@ export function AddUser() {
                     />
                     <S.TextStatus>{status ? "Ativo" : "Inativo"}</S.TextStatus>
                   </S.ViewToggleContainer>
-                </S.ViewStatus>
+                </S.ViewStatus> */}
               </S.ViewRow>
             </S.ViewForm>
 
@@ -248,13 +311,16 @@ export function AddUser() {
                   <S.ViewButton>
                     <RectButton
                       style={styles.buttonAdd}
-                      onPress={() => {}}
+                      onPress={() => setSelectModalVisible(true)}
                     ></RectButton>
                     <S.TextButton>Conceder acesso</S.TextButton>
                   </S.ViewButton>
                 </S.ViewRow>
 
-                <CondominiumTable />
+                <CondominiumTable
+                  condominium={accessCondominium}
+                  removePress={removeAccess}
+                />
               </S.ViewCondominium>
             ) : (
               <S.TextIsAdmin>
@@ -282,6 +348,18 @@ export function AddUser() {
             passwordReset();
             setModalVisible(false);
           }}
+        />
+      </Modal>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={selectModalVisible}
+      >
+        <SelectCondominiumModal
+          onClose={() => setSelectModalVisible(false)}
+          onPress={(condominium: CondominiumsType) =>
+            selectAccessPress(condominium)
+          }
         />
       </Modal>
     </S.ViewWrapper>

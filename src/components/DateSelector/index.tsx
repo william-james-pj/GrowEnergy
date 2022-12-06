@@ -15,23 +15,22 @@ import * as S from "./styles";
 
 type DateSelectorProps = {
   onChange: (dateSelected: Date) => void;
+  currentDate: Date;
 };
 
-export function DateSelector({ onChange }: DateSelectorProps) {
+export function DateSelector({ onChange, currentDate }: DateSelectorProps) {
   const { theme } = useDarkMode();
-  const [date, setDate] = useState(new Date());
   const [isShow, setIsShow] = useState(false);
 
   const changeDate = (dateSelected: Date) => {
-    setDate(dateSelected);
     setIsShow(false);
     onChange(dateSelected);
   };
 
   const getCurrentDate = (): string => {
-    let monthName = getMonthLongName(date);
+    let monthName = getMonthLongName(currentDate);
 
-    return `${monthName}, ${date.getFullYear()}`;
+    return `${monthName}, ${currentDate.getFullYear()}`;
   };
 
   return (
@@ -45,7 +44,7 @@ export function DateSelector({ onChange }: DateSelectorProps) {
         <CalendarSVG fill={theme.colors.disabled} />
 
         <S.TextValue>
-          {`${getMonthShortName(date)} - ${date.getFullYear()}`}
+          {`${getMonthShortName(currentDate)} - ${currentDate.getFullYear()}`}
         </S.TextValue>
 
         <ArrowSVG fill={theme.colors.disabled} />
@@ -55,8 +54,8 @@ export function DateSelector({ onChange }: DateSelectorProps) {
           <BoxMonths
             onChange={changeDate}
             currentDateString={getCurrentDate()}
-            currentMonth={date.getMonth()}
-            currentYear={date.getFullYear()}
+            currentMonth={currentDate.getMonth()}
+            currentYear={currentDate.getFullYear()}
             close={() => setIsShow(false)}
           />
         </S.ViewModalContainer>

@@ -1,19 +1,126 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { useDarkMode } from "../../hooks/userDarkMode";
+import { useCondominium } from "../../hooks/useCondominium";
+import { useCondominiumSelected } from "../../hooks/useCondominiumSelected";
 
+import { LoadingChart } from "../../components/LoadingChart";
 import { Header } from "../../components/Header";
 import { GenerationCard } from "./components/GenerationCard";
 import { ChartBox } from "../../components/ChartBox";
 import { OneLineChart } from "../../components/Charts/OneLineChart";
 import { BarsChart } from "../../components/Charts/BarsChart";
+import {
+  getAllGeneration,
+  getDailyGenerationByStation,
+  getLastGenerationByDay,
+} from "../../utils/generationsFunctions";
+import { getDayOfWeek, getLastMonth } from "../../utils/dateFunctions";
 
 import * as S from "./styles";
 
+const startValues = [0, 0, 0, 0, 0];
+
 export function SeeDevice() {
   const { theme } = useDarkMode();
+  const { generationThisMonth, getGenerationsByLastMonths } = useCondominium();
+  const { stationSelected } = useCondominiumSelected();
+
+  const [dayliyGeneration, setDayliyGeneration] = useState(0);
+  const [monthlyGeneration, setMonthlyGeneration] = useState(0);
+
+  const [labelFirstChart, setlabelFirstChart] = useState<string[]>([]);
+  const [valuesFirstChart, setValuesFirstChart] =
+    useState<number[]>(startValues);
+  const [maxFirstChart, setMaxFirstChart] = useState(0);
+  const [minFirstChart, setMinFirstChart] = useState(0);
+
+  const [labelSecondChart, setlabelSecondChart] = useState<string[]>([]);
+  const [valuesSecondChart, setValuesSecondChart] =
+    useState<number[]>(startValues);
+  const [maxSecondChart, setMaxSecondChart] = useState(0);
+  const [minSecondChart, setMinSecondChart] = useState(0);
+
+  const [loadingFirstChart, setLoadingFirstChart] = useState(true);
+  const [loadingSecondChart, setLoadingSecondChart] = useState(true);
+
+  const getGenerations = () => {
+    if (stationSelected === undefined) return;
+
+    let dayliy = getDailyGenerationByStation(
+      [stationSelected],
+      generationThisMonth
+    );
+
+    let monthly = getAllGeneration([stationSelected], generationThisMonth);
+
+    setDayliyGeneration(dayliy);
+    setMonthlyGeneration(monthly);
+  };
+
+  const getDataFirstChart = () => {
+    setLoadingFirstChart(true);
+    if (stationSelected === undefined) {
+      setLoadingFirstChart(false);
+      return;
+    }
+
+    let dayOfWeek = getDayOfWeek(new Date(), 5);
+    let lastGeneration = getLastGenerationByDay(
+      new Date(),
+      5,
+      generationThisMonth,
+      stationSelected.id
+    );
+
+    let max = Math.max(...lastGeneration);
+    let min = Math.min(...lastGeneration);
+
+    setMaxFirstChart(max);
+    setMinFirstChart(min);
+    setlabelFirstChart(dayOfWeek);
+    setValuesFirstChart(lastGeneration);
+    setLoadingFirstChart(false);
+  };
+
+  const getDataSecondChart = async () => {
+    setLoadingSecondChart(true);
+    if (stationSelected === undefined) {
+      setLoadingSecondChart(false);
+      return;
+    }
+
+    let lastMonths = getLastMonth(new Date(), 5);
+
+    let lastGeneration = await getGenerationsByLastMonths(new Date(), 5, [
+      stationSelected,
+    ]);
+
+    let max = Math.max(...lastGeneration);
+    let min = Math.min(...lastGeneration);
+
+    setMaxSecondChart(max);
+    setMinSecondChart(min);
+    setlabelSecondChart(lastMonths);
+    setValuesSecondChart(lastGeneration);
+    setLoadingSecondChart(false);
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await Promise.all([
+        getGenerations(),
+        getDataFirstChart(),
+        getDataSecondChart(),
+      ]);
+    };
+
+    fetchData().catch(console.error);
+
+    return () => {};
+  }, []);
 
   return (
     <S.ViewWrapper>
@@ -25,9 +132,12 @@ export function SeeDevice() {
           alwaysBounceHorizontal={false}
           bounces={false}
         >
-          <Header title="Dispositivo 1" back={true} />
+          <Header title={stationSelected?.name} back={true} />
           <S.TextSectionTitle>Geração total</S.TextSectionTitle>
-          <GenerationCard />
+          <GenerationCard
+            dayliy={dayliyGeneration}
+            monthly={monthlyGeneration}
+          />
           <S.TextSectionTitle>Performace</S.TextSectionTitle>
           <ChartBox
             title="Geração solar"
@@ -35,15 +145,16 @@ export function SeeDevice() {
             isCompleteInfo={false}
             isOneInfo
             firstInfo={{
-              title: "Geração total",
-              maxValue: "100",
-              minValue: "85",
+              title: "Geração total (kW)",
+              maxValue: `${maxFirstChart}`,
+              minValue: `${minFirstChart}`,
             }}
           >
-            <BarsChart
-              values={[90, 95, 85, 100, 90, 95]}
-              labelsX={["Seg", "Ter", "Qua", "Qui", "Sex", "Sab"]}
-            />
+            {loadingFirstChart || loadingSecondChart ? (
+              <LoadingChart />
+            ) : (
+              <BarsChart values={valuesFirstChart} labelsX={labelFirstChart} />
+            )}
           </ChartBox>
           <S.ViewSeparator />
           <ChartBox
@@ -52,15 +163,19 @@ export function SeeDevice() {
             isCompleteInfo={false}
             isOneInfo
             firstInfo={{
-              title: "Geração total",
-              maxValue: "320",
-              minValue: "290",
+              title: "Geração total (kW)",
+              maxValue: `${maxSecondChart}`,
+              minValue: `${minSecondChart}`,
             }}
           >
-            <OneLineChart
-              values={[300, 310, 290, 310, 320]}
-              labelsX={["Abr", "Maio", "Jun", "Jul", "Ago"]}
-            />
+            {loadingFirstChart || loadingSecondChart ? (
+              <LoadingChart />
+            ) : (
+              <OneLineChart
+                values={valuesSecondChart}
+                labelsX={labelSecondChart}
+              />
+            )}
           </ChartBox>
           <S.ViewFooter />
         </ScrollView>

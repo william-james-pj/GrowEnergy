@@ -17,6 +17,7 @@ type AuthContextType = {
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
   errorMsg: string;
+  isLoading: boolean;
 };
 
 type AuthContextProviderProps = {
@@ -33,6 +34,7 @@ export const AuthContext = createContext({} as AuthContextType);
 export function AuthContextProvider(props: AuthContextProviderProps) {
   const [user, setUser] = useState<UserType>();
   const [errorMsg, setErrorMsg] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
   async function signin(useProps: createUserProps) {
     try {
@@ -134,7 +136,9 @@ export function AuthContextProvider(props: AuthContextProviderProps) {
           idToken: token,
           disabled: false,
         });
+        setIsLoading(false);
       }
+      setIsLoading(false);
     });
 
     return () => {
@@ -150,6 +154,7 @@ export function AuthContextProvider(props: AuthContextProviderProps) {
         login,
         logout,
         errorMsg,
+        isLoading,
       }}
     >
       {props.children}

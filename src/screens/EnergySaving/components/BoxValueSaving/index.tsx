@@ -4,7 +4,7 @@ import * as S from "./styles";
 
 type BoxValueSavingProps = {
   title: String;
-  value: Number;
+  value: String;
   date?: String;
   isSecudary?: Boolean;
 };

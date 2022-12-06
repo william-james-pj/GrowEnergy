@@ -10,7 +10,7 @@ type UserContextType = {
   isLoading: boolean;
   users: UserType[];
   getUsers: () => Promise<void>;
-  creatUser: (newUser: NewUserType) => Promise<void>;
+  creatUser: (newUser: NewUserType) => Promise<string>;
   updateUser: (userUpdated: UserType) => Promise<void>;
 };
 
@@ -52,19 +52,21 @@ export function UserContextProvider(props: UserContextProviderProps) {
   }
 
   // add isActive
-  async function creatUser(newUser: NewUserType) {
+  async function creatUser(newUser: NewUserType): Promise<string> {
     try {
       setIsLoading(true);
       const response = await axios.post(`${baseUrl}/users`, newUser, {
         headers: { Authorization: `Bearer ${user?.idToken}` },
       });
-      // if (response.status === 200) {
+      // if (response.status === 201) {
       //   console.log(response.data);
       // }
       setIsLoading(false);
+      return response.data.uid as string;
     } catch (error) {
       console.log(error);
       setIsLoading(false);
+      return "";
     }
   }
 
